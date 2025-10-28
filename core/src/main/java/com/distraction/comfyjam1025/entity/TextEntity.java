@@ -4,7 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
+import com.distraction.comfyjam1025.Context;
 
 import java.util.Objects;
 
@@ -24,12 +26,15 @@ public class TextEntity extends Entity {
     private String currentText = "";
     private Color color = Color.WHITE;
 
-    public TextEntity(BitmapFont font, String text, float x, float y, Alignment alignment) {
-        this(font, text, x, y);
+    public float ta = 1;
+
+    public TextEntity(Context context, BitmapFont font, String text, float x, float y, Alignment alignment) {
+        this(context, font, text, x, y);
         this.alignment = alignment;
     }
 
-    public TextEntity(BitmapFont font, String text, float x, float y) {
+    public TextEntity(Context context, BitmapFont font, String text, float x, float y) {
+        super(context);
         this.font = font;
         glyphLayout = new GlyphLayout();
         setText(text);
@@ -46,11 +51,22 @@ public class TextEntity extends Entity {
         }
     }
 
-    public void setColor(Color color) {
-        if (color != this.color) {
-            this.color = color;
+    public void setColor(float r, float g, float b, float a) {
+        if (color.r != r || color.g != g || color.b != b || color.a != a) {
+            color.set(r, g, b, a);
             glyphLayout.setText(font, currentText, 0, currentText.length(), color, 0, Align.left, false, null);
         }
+    }
+
+    @Override
+    public void update(float dt) {
+        if (a < ta) {
+            a += dt * 2;
+        } else if (a > ta) {
+            a -= dt * 2;
+        }
+        a = MathUtils.clamp(a, 0, 1);
+        setColor(1, 1, 1, a);
     }
 
     @Override

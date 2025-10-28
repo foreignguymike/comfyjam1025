@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.distraction.comfyjam1025.Context;
 import com.distraction.comfyjam1025.Utils;
 
-public class Leaf extends Particle {
+public class Leaf extends ImageEntity {
 
     private static final float SPEED = 5;
 
@@ -13,7 +13,7 @@ public class Leaf extends Particle {
     private float yo;
 
     public Leaf(Context context, float x, float y) {
-        super(context.getImage("leaves").split(5, 5)[0][MathUtils.random(0, 3)]);
+        super(context, context.getImage("leaves").split(5, 5)[0][MathUtils.random(0, 3)]);
         this.x = x;
         this.y = y;
     }

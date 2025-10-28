@@ -2,14 +2,16 @@ package com.distraction.comfyjam1025;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
 
+    private static final float TICK = 1f / 60f;
+
     private Context context;
+
+    private float accum;
 
     @Override
     public void create() {
@@ -20,7 +22,11 @@ public class Main extends ApplicationAdapter {
     public void render() {
         ScreenUtils.clear(0, 0, 0, 1, true);
         context.sm.input();
-        context.sm.update(Gdx.graphics.getDeltaTime());
+        accum += Gdx.graphics.getDeltaTime();
+        while (accum > TICK) {
+            accum -= TICK;
+            context.sm.update(TICK);
+        }
         context.sm.render();
     }
 

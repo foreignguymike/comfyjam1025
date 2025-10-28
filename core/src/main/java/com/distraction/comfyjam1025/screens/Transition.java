@@ -1,6 +1,7 @@
 package com.distraction.comfyjam1025.screens;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -33,6 +34,8 @@ public class Transition {
     private float time;
     private boolean done;
 
+    private Color flashColor = new Color(1, 1, 1, 1);
+
     public Transition(Context context, Type type, float duration) {
         this(context, type, null, null, null, duration, () -> {});
     }
@@ -50,6 +53,10 @@ public class Transition {
         this.callback = callback;
 
         pixel = context.getPixel();
+    }
+
+    public void setFlashColor(Color color) {
+        this.flashColor = color;
     }
 
     public void setTransition(Type type) {
@@ -136,10 +143,10 @@ public class Transition {
                 }
             }
         } else if (type == Type.FLASH_IN) {
-            sb.setColor(1, 1, 1, 1f - (time / duration));
+            sb.setColor(flashColor.r, flashColor.g, flashColor.b, 1f - (time / duration));
             sb.draw(pixel, 0, 0, Constants.WIDTH, Constants.HEIGHT);
         } else if (type == Type.FLASH_OUT) {
-            sb.setColor(1, 1, 1, time / duration);
+            sb.setColor(flashColor.r, flashColor.g, flashColor.b,time / duration);
             sb.draw(pixel, 0, 0, Constants.WIDTH, Constants.HEIGHT);
         }
     }

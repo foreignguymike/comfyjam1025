@@ -4,16 +4,27 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Animation {
 
-    private final TextureRegion[] images;
-    private final float interval;
+    private TextureRegion[] images;
+    private float interval;
 
     private float timer;
-    private int frame;
-    private int finishCount = 0;
+    public int frame;
+    public int finishCount;
+
+    public Animation() {
+
+    }
 
     public Animation(TextureRegion[] images, float interval) {
+        setAnimation(images, interval);
+    }
+
+    public void setAnimation(TextureRegion[] images, float interval) {
         this.images = images;
         this.interval = interval;
+        frame = 0;
+        timer = 0;
+        finishCount = 0;
     }
 
     public int getFinishCount() {
@@ -21,21 +32,21 @@ public class Animation {
     }
 
     public void update(float dt) {
+        if (images == null) return;
         if (interval <= 0) return;
         timer += dt;
         if (timer >= interval) {
             timer -= interval;
             frame++;
-            if (frame == images.length - 1) {
-                finishCount++;
-            }
             if (frame >= images.length) {
                 frame = 0;
+                finishCount++;
             }
         }
     }
 
     public TextureRegion getImage() {
+        if (images == null) return null;
         return images[frame];
     }
 

@@ -3,21 +3,22 @@ package com.distraction.comfyjam1025.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.distraction.comfyjam1025.Animation;
+import com.distraction.comfyjam1025.Context;
 import com.distraction.comfyjam1025.Utils;
 
-public class Particle extends Entity {
-
-    protected final Animation animation;
+public class ImageEntity extends Entity {
 
     protected float time;
 
-    public Particle(TextureRegion image) {
-        this(new TextureRegion[] { image });
+    public boolean hflip;
+
+    public ImageEntity(Context context, TextureRegion image) {
+        this(context, new TextureRegion[]{image}, 0);
     }
 
-    public Particle(TextureRegion[] images) {
-        animation = new Animation(images, 0.016f);
+    public ImageEntity(Context context, TextureRegion[] images, float interval) {
+        super(context);
+        animation.setAnimation(images, interval);
         w = images[0].getRegionWidth();
         h = images[0].getRegionHeight();
     }
@@ -31,6 +32,6 @@ public class Particle extends Entity {
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(1, 1, 1, 1);
-        Utils.drawCentered(sb, animation.getImage(), x, y);
+        Utils.drawCentered(sb, animation.getImage(), x, y, hflip);
     }
 }

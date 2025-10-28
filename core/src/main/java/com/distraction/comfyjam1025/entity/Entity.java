@@ -1,8 +1,12 @@
 package com.distraction.comfyjam1025.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.distraction.comfyjam1025.Animation;
+import com.distraction.comfyjam1025.Context;
 
-abstract class Entity {
+public class Entity {
+
+    protected Context context;
 
     public float x;
     public float y;
@@ -11,9 +15,16 @@ abstract class Entity {
     public float w;
     public float h;
     public float rad;
-    public float a;
+    public float a = 1;
+
+    public final Animation animation;
 
     public boolean remove;
+
+    public Entity(Context context) {
+        this.context = context;
+        animation = new Animation();
+    }
 
     public boolean contains(float x, float y) {
         return contains(x, y, 0, 0);
