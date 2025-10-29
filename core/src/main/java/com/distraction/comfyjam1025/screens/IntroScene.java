@@ -73,60 +73,6 @@ public class IntroScene extends Screen {
     private int textIndex = -1;
     private TextData[] texts = TEXT_DATA_1;
 
-    /**
-     * Script
-     * <p>
-     * [Camera slowly pans right to grave and tree]
-     * Another year. Another fall.
-     * I used to think someone might visit...
-     * Family is gone now. No close friends.
-     * No one to remember me.
-     * It's strange, being forgotten.
-     * You fade a little more each year,
-     * like the trees losing their leaves.
-     * <p>
-     * [Spirit appears next to grave]
-     * I suppose that's all right. I had a quiet life.
-     * No one to care. No one to miss.
-     * Maybe that's enough.
-     * <p>
-     * [Girl enters frame from left, walks to grave, leaves item next to grave, leaves]
-     * ...Who was that?
-     * She left something...
-     * <p>
-     * [Year 1]
-     * <p>
-     * <p>
-     * [Puzzle 1 - flower]
-     * <p>
-     * A flower? People leave those for the ones they love.
-     * Must be a mistake.
-     * <p>
-     * [Flashback 1 - ???]
-     * <p>
-     * [Year 2]
-     * <p>
-     * [Grave scene. Girl comes back, leaves item, and leaves].
-     * Again? The same girl came back.
-     * I still don't know what she's doing here.
-     * I thought nobody cared.
-     * That thing she left... it looks familiar.
-     * <p>
-     * [Puzzle 2 - Photo]
-     * <p>
-     * It can't be.
-     * I kept that photo close until the end.
-     * How would she find it? And why leave it here?
-     * <p>
-     * [Flashback 2 - Hospital bed holding photo]
-     * <p>
-     * [Year 3]
-     * <p>
-     * [Puzzle 3 - Patchwork heart]
-     * <p>
-     * [Flashback 3 - Clipboard showing "Organ donor - confirmed"]
-     */
-
     public IntroScene(Context context) {
         super(context);
 

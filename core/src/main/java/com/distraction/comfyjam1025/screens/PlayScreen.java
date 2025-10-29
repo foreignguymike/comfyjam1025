@@ -18,7 +18,6 @@ public class PlayScreen extends Screen {
 
     private static final int ROWS = 3;
 
-    private final ImageEntity select;
     private final TextureRegion puzzleBg;
     private final PuzzlePiece[][] puzzle;
     private PuzzlePiece selected;
@@ -39,7 +38,6 @@ public class PlayScreen extends Screen {
         swapText = new TextEntity(context, context.getFont(Context.M5X716), "Swap", 270, 135, TextEntity.Alignment.CENTER);
         rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", 270, 75, TextEntity.Alignment.CENTER);
 
-        select = new ImageEntity(context, context.getImage("selected"));
         puzzleBg = context.getImage("puzzlebg");
         puzzle = new PuzzlePiece[ROWS][ROWS];
         int tileSize = 120 / ROWS;
@@ -118,8 +116,6 @@ public class PlayScreen extends Screen {
                     if (cell.contains(m.x, m.y)) {
                         if (selected == null) {
                             selected = cell;
-                            select.x = selected.x;
-                            select.y = selected.y;
                         } else if (selected == cell) {
                             selected = null;
                         } else {
@@ -182,8 +178,15 @@ public class PlayScreen extends Screen {
         for (PuzzlePiece[] row : puzzle) {
             for (PuzzlePiece cell : row) cell.render(sb);
         }
-        if (selected != null) select.render(sb);
+        if (selected != null) {
+            sb.setColor(Constants.PUZZLE_PIECE_BORDER);
+            sb.draw(pixel, selected.x - selected.w / 2f - 1, selected.y - selected.h / 2f - 1, selected.w + 2, 1);
+            sb.draw(pixel, selected.x - selected.w / 2f - 1, selected.y - selected.h / 2f - 1, 1, selected.h + 2);
+            sb.draw(pixel, selected.x - selected.w / 2f - 1, selected.y + selected.h / 2f, selected.w + 2, 1);
+            sb.draw(pixel, selected.x + selected.w / 2f, selected.y - selected.h / 2f - 1, 1, selected.h + 2);
+        }
 
+        sb.setColor(1, 1, 1, 1);
         in.render(sb);
         out.render(sb);
 
