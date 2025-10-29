@@ -19,7 +19,7 @@ public class YearScreen extends Screen {
         in.setFlashColor(Color.BLACK);
         in.start();
         out = new Transition(context, Transition.Type.FLASH_OUT, 2f);
-        out.setCallback(() -> context.sm.replace(new PlayScreen(context)));
+        out.setCallback(() -> context.sm.replace(new PlayScreen(context, year)));
         out.setFlashColor(Color.BLACK);
     }
 
