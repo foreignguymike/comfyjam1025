@@ -28,7 +28,7 @@ public class Context {
         sb = new SpriteBatch();
 
 //        sm = new ScreenManager(new com.distraction.comfyjam1025.screens.IntroScene(this));
-        sm = new ScreenManager(new com.distraction.comfyjam1025.screens.PlayScreen(this, 3));
+        sm = new ScreenManager(new com.distraction.comfyjam1025.screens.PlayScreen(this, 4));
     }
 
     public TextureRegion getImage(String key) {

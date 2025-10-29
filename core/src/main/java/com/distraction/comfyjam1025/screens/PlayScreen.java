@@ -16,7 +16,7 @@ import java.util.List;
 
 public class PlayScreen extends Screen {
 
-    private static final int ROWS = 3;
+    private final int numRows;
 
     private final TextureRegion puzzleBg;
     private final PuzzlePiece[][] puzzle;
@@ -30,6 +30,9 @@ public class PlayScreen extends Screen {
     public PlayScreen(Context context, int year) {
         super(context);
 
+        if (year == 4) numRows = 4;
+        else numRows = 3;
+
         lmb = new ImageEntity(context, context.getImage("mouse"));
         lmb.setPosition(270, 115);
         rmb = new ImageEntity(context, context.getImage("mouse"));
@@ -39,14 +42,14 @@ public class PlayScreen extends Screen {
         rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", 270, 75, TextEntity.Alignment.CENTER);
 
         puzzleBg = context.getImage("puzzlebg");
-        puzzle = new PuzzlePiece[ROWS][ROWS];
-        int tileSize = 120 / ROWS;
+        puzzle = new PuzzlePiece[numRows][numRows];
+        int tileSize = 120 / numRows;
         float sx = Constants.WIDTH / 2f - 60;
         float sy = Constants.HEIGHT / 2f + 60;
         TextureRegion[][] images = context.getImage("puzzle" + year).split(tileSize, tileSize);
         for (int row = 0; row < puzzle.length; row++) {
             for (int col = 0; col < puzzle[row].length; col++) {
-                puzzle[row][col] = new PuzzlePiece(context, row * ROWS + col, row, col, images[row][col]);
+                puzzle[row][col] = new PuzzlePiece(context, row * numRows + col, row, col, images[row][col]);
             }
         }
 
@@ -77,7 +80,7 @@ public class PlayScreen extends Screen {
     }
 
     private void updatePositions() {
-        int tileSize = 120 / ROWS;
+        int tileSize = 120 / numRows;
         float sx = Constants.WIDTH / 2f - 60;
         float sy = Constants.HEIGHT / 2f + 60;
         for (int row = 0; row < puzzle.length; row++) {
@@ -94,7 +97,7 @@ public class PlayScreen extends Screen {
     private boolean isDone() {
         for (int row = 0; row < puzzle.length; row++) {
             for (int col = 0; col < puzzle[row].length; col++) {
-                if (puzzle[row][col].id != row * ROWS + col || puzzle[row][col].rotateIndex != 0) {
+                if (puzzle[row][col].id != row * numRows + col || puzzle[row][col].rotateIndex != 0) {
                     return false;
                 }
             }
