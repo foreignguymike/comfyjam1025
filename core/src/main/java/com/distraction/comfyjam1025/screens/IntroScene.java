@@ -27,7 +27,7 @@ public class IntroScene extends Screen {
         new TextData("But family is gone now. No friends left.", 4.5f),
         new TextData("No one to remember me.", 4),
         new TextData("It's strange, being forgotten.", 4),
-        new TextData("You fade a little more each year", 4.5f),
+        new TextData("You fade a little more each year,", 4.5f),
         new TextData("like trees losing their leaves.", 4.5f),
         new TextData("I suppose that's alright.", 4),
         new TextData("I've had a quiet life.", 4),
@@ -37,7 +37,8 @@ public class IntroScene extends Screen {
     };
 
     private static final TextData[] TEXT_DATA_2 = new TextData[]{
-        new TextData("...Who was that?", 4)
+        new TextData("...Who was that?", 4),
+        new TextData("She left something...", 4)
     };
 
     enum Action {
@@ -73,13 +74,16 @@ public class IntroScene extends Screen {
     private TextData[] texts = TEXT_DATA_1;
 
     /**
-     * Scene 1
+     * Script
      * <p>
      * [Camera slowly pans right to grave and tree]
      * Another year. Another fall.
      * I used to think someone might visit...
-     * Family is gone now. No friends left. No one to remember me.
-     * It's strange, being forgotten. You fade a little more each year, like the trees losing their leaves.
+     * Family is gone now. No close friends.
+     * No one to remember me.
+     * It's strange, being forgotten.
+     * You fade a little more each year,
+     * like the trees losing their leaves.
      * <p>
      * [Spirit appears next to grave]
      * I suppose that's all right. I had a quiet life.
@@ -88,16 +92,39 @@ public class IntroScene extends Screen {
      * <p>
      * [Girl enters frame from left, walks to grave, leaves item next to grave, leaves]
      * ...Who was that?
+     * She left something...
      * <p>
-     * [title card]
      * [Year 1]
      * <p>
-     * She left something, but I can't make out what it is.
      * <p>
-     * [Puzzle time - flower]
+     * [Puzzle 1 - flower]
      * <p>
-     * A flower? But I don't recognize her...
-     * Why would she send me a flower?
+     * A flower? People leave those for the ones they love.
+     * Must be a mistake.
+     * <p>
+     * [Flashback 1 - ???]
+     * <p>
+     * [Year 2]
+     * <p>
+     * [Grave scene. Girl comes back, leaves item, and leaves].
+     * Again? The same girl came back.
+     * I still don't know what she's doing here.
+     * I thought nobody cared.
+     * That thing she left... it looks familiar.
+     * <p>
+     * [Puzzle 2 - Photo]
+     * <p>
+     * It can't be.
+     * I kept that photo close until the end.
+     * How would she find it? And why leave it here?
+     * <p>
+     * [Flashback 2 - Hospital bed holding photo]
+     * <p>
+     * [Year 3]
+     * <p>
+     * [Puzzle 3 - Patchwork heart]
+     * <p>
+     * [Flashback 3 - Clipboard showing "Organ donor - confirmed"]
      */
 
     public IntroScene(Context context) {
