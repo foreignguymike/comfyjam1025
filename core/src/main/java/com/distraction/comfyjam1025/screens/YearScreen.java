@@ -12,7 +12,7 @@ public class YearScreen extends Screen {
 
     public YearScreen(Context context, int year) {
         super(context);
-        text = new TextEntity(context, context.getFont(Context.VCR20), "Year " + year, Constants.WIDTH / 2f, Constants.HEIGHT / 2f, TextEntity.Alignment.CENTER);
+        text = new TextEntity(context, context.getFont(Context.VCR20), "YEAR " + year, Constants.WIDTH / 2f, Constants.HEIGHT / 2f, TextEntity.Alignment.CENTER);
         text.setColor(1, 1, 1, 1);
 
         in = new Transition(context, Transition.Type.FLASH_IN, 2f);

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.distraction.comfyjam1025.screens.IntroScene;
 import com.distraction.comfyjam1025.screens.ScreenManager;
 
 public class Context {
@@ -28,7 +27,8 @@ public class Context {
 
         sb = new SpriteBatch();
 
-        sm = new ScreenManager(new IntroScene(this));
+        sm = new ScreenManager(new com.distraction.comfyjam1025.screens.IntroScene(this));
+//        sm = new ScreenManager(new com.distraction.comfyjam1025.screens.YearScreen(this, 1));
     }
 
     public TextureRegion getImage(String key) {

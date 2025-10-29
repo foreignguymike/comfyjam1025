@@ -18,25 +18,26 @@ import java.util.List;
 public class IntroScene extends Screen {
 
     private static final float PAN_SPEED = 4;
-    private static final float GIRL_SPEED = 20;
+    private static final float GIRL_SPEED = 30;
     private static final float GIRL_START = 150;
 
     private static final TextData[] TEXT_DATA_1 = new TextData[]{
-        new TextData("Another year. Another autumn.", 5),
-        new TextData("I used to think someone might visit...", 5),
-        new TextData("But family is gone now. No friends left.", 5),
-        new TextData("No one to remember me.", 5),
-        new TextData("It's strange, being forgotten.", 5),
-        new TextData("You fade a little more each year", 5),
-        new TextData("like trees losing their leaves.", 5),
-        new TextData("", 3),
+        new TextData("Another year. Another autumn.", 4),
+        new TextData("I used to think someone might visit...", 4.5f),
+        new TextData("But family is gone now. No friends left.", 4.5f),
+        new TextData("No one to remember me.", 4),
+        new TextData("It's strange, being forgotten.", 4),
+        new TextData("You fade a little more each year", 4.5f),
+        new TextData("like trees losing their leaves.", 4.5f),
         new TextData("I suppose that's alright.", 4),
         new TextData("I've had a quiet life.", 4),
-        new TextData("Maybe that's enough.", 4)
+        new TextData("Maybe that's enough.", 4),
+        new TextData("", 2),
+        new TextData("Hmm? Someone's coming.", 4)
     };
 
     private static final TextData[] TEXT_DATA_2 = new TextData[]{
-        new TextData("...Who was that?", 6)
+        new TextData("...Who was that?", 4)
     };
 
     enum Action {
@@ -63,7 +64,7 @@ public class IntroScene extends Screen {
     private float leafTime;
 
     private final float gravex = 350;
-    private final float panx = gravex - 30;
+    private final float panx = gravex + 30;
 
     private float textTime;
     private float nextTextTime = 4;
@@ -179,7 +180,7 @@ public class IntroScene extends Screen {
             if (girl.x >= gravex + 15) {
                 girl.x = gravex + 15;
                 action = Action.GIRL_GIFT;
-                girl.animation.setAnimation(Arrays.copyOfRange(context.getImage("girl").split(22, 55)[0], 2, 4), 1f);
+                girl.animation.setAnimation(Arrays.copyOfRange(context.getImage("girl").split(22, 55)[0], 2, 4), 1.5f);
             }
         } else if (action == Action.GIRL_GIFT) {
             girl.update(dt);
