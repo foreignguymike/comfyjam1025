@@ -8,6 +8,7 @@ import com.distraction.comfyjam1025.Constants;
 import com.distraction.comfyjam1025.Context;
 import com.distraction.comfyjam1025.entity.ImageEntity;
 import com.distraction.comfyjam1025.entity.PuzzlePiece;
+import com.distraction.comfyjam1025.entity.TextEntity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,11 +21,23 @@ public class PlayScreen extends Screen {
     private final ImageEntity select;
     private final TextureRegion puzzleBg;
     private final PuzzlePiece[][] puzzle;
-
     private PuzzlePiece selected;
+
+    private final ImageEntity lmb;
+    private final ImageEntity rmb;
+    private final TextEntity swapText;
+    private final TextEntity rotateText;
 
     public PlayScreen(Context context, int year) {
         super(context);
+
+        lmb = new ImageEntity(context, context.getImage("mouse"));
+        lmb.setPosition(270, 115);
+        rmb = new ImageEntity(context, context.getImage("mouse"));
+        rmb.setPosition(270, 55);
+        rmb.hflip = true;
+        swapText = new TextEntity(context, context.getFont(Context.M5X716), "Swap", 270, 135, TextEntity.Alignment.CENTER);
+        rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", 270, 75, TextEntity.Alignment.CENTER);
 
         select = new ImageEntity(context, context.getImage("selected"));
         puzzleBg = context.getImage("puzzlebg");
@@ -159,12 +172,15 @@ public class PlayScreen extends Screen {
         sb.draw(pixel, 0, 0, Constants.WIDTH, Constants.HEIGHT);
 
         sb.setColor(1, 1, 1, 1);
-        sb.draw(puzzleBg, Constants.WIDTH / 2f - puzzleBg.getRegionWidth() / 2f, Constants.HEIGHT / 2f - puzzleBg.getRegionHeight() / 2f);
+        swapText.render(sb);
+        lmb.render(sb);
+        rotateText.render(sb);
+        rmb.render(sb);
 
+        sb.draw(puzzleBg, Constants.WIDTH / 2f - puzzleBg.getRegionWidth() / 2f, Constants.HEIGHT / 2f - puzzleBg.getRegionHeight() / 2f);
         for (PuzzlePiece[] row : puzzle) {
             for (PuzzlePiece cell : row) cell.render(sb);
         }
-
         if (selected != null) select.render(sb);
 
         in.render(sb);

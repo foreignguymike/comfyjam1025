@@ -26,6 +26,11 @@ public class Entity {
         animation = new Animation();
     }
 
+    public void setPosition(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+
     public boolean contains(float x, float y) {
         return contains(x, y, 0, 0);
     }

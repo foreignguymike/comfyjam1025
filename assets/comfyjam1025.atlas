@@ -4,7 +4,7 @@ repeat:none
 girl
 bounds:252,12,88,55
 grass1
-bounds:452,180,32,16
+bounds:478,180,32,16
 grass2
 bounds:284,138,38,5
 grass3
@@ -13,8 +13,10 @@ grave
 bounds:252,102,30,41
 leaves
 bounds:2,2,20,5
+mouse
+bounds:452,166,24,30
 pixel
-bounds:496,239,1,1
+bounds:130,20,1,1
 puzzle1
 bounds:130,23,120,120
 puzzlebg

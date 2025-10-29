@@ -40,6 +40,7 @@ public class PuzzlePiece extends ImageEntity {
         this.col = col;
     }
 
+    @Override
     public void setPosition(float x, float y) {
         this.x = this.destx = x;
         this.y = this.desty = y;
