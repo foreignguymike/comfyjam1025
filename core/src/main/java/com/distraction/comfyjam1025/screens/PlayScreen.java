@@ -114,6 +114,7 @@ public class PlayScreen extends Screen {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             for (PuzzlePiece[] row : puzzle) {
                 for (PuzzlePiece cell : row) {
+                    if (!cell.atDestination()) continue;
                     if (cell.contains(m.x, m.y)) {
                         if (selected == null) {
                             selected = cell;

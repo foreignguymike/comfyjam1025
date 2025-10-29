@@ -59,4 +59,5 @@ public class Constants {
     public static final Color SCENE_1_GRASS = COLORS[17];
 
     public static final Color PUZZLE_BG = COLORS[11];
+    public static final Color PUZZLE_PIECE_BG = COLORS[27];
 }

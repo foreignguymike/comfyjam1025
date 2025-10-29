@@ -272,7 +272,7 @@ public class IntroScene extends Screen {
 
         sb.setColor(1, 1, 1, 1);
         sb.draw(grave, gravex, 8);
-        sb.draw(tree, gravex, 8);
+        sb.draw(tree, gravex, 9);
         girl.render(sb);
         for (ImageEntity p : particles) p.render(sb);
 

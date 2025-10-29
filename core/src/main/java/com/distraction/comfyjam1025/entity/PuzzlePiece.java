@@ -1,8 +1,10 @@
 package com.distraction.comfyjam1025.entity;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.distraction.comfyjam1025.Constants;
 import com.distraction.comfyjam1025.Context;
 import com.distraction.comfyjam1025.Utils;
 
@@ -29,10 +31,14 @@ public class PuzzlePiece extends ImageEntity {
 
     public int rotateIndex = 0;
 
+    private final TextureRegion pixel;
+    public Color bgColor = Constants.PUZZLE_PIECE_BG;
+
     public PuzzlePiece(Context context, int id, int row, int col, TextureRegion image) {
         super(context, image);
         this.id = id;
         setCell(row, col);
+        pixel = context.getPixel();
     }
 
     public void setCell(int row, int col) {
@@ -53,8 +59,8 @@ public class PuzzlePiece extends ImageEntity {
         dx = destx - x;
         dy = desty - y;
         totalDist = calculateDistance(x, y, destx, desty);
-        dx *= 5;
-        dy *= 5;
+        dx *= 4;
+        dy *= 4;
         dx = Math.abs(dx);
         dy = Math.abs(dy);
     }
@@ -98,7 +104,7 @@ public class PuzzlePiece extends ImageEntity {
         }
     }
 
-    private  boolean atDestination() {
+    public boolean atDestination() {
         return x == destx && y == desty && destrad == rad;
     }
 
@@ -123,6 +129,8 @@ public class PuzzlePiece extends ImageEntity {
 
     @Override
     public void render(SpriteBatch sb) {
+        sb.setColor(bgColor);
+        Utils.drawRotatedScaled(sb, pixel, x, y, rad, w * scale);
         sb.setColor(1, 1, 1, 1);
         Utils.drawRotatedScaled(sb, animation.getImage(), x, y, rad, scale);
     }
