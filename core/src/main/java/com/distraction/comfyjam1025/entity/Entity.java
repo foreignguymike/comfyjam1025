@@ -31,6 +31,11 @@ public class Entity {
         this.y = y;
     }
 
+    public void setSize(float w, float h) {
+        this.w = w;
+        this.h = h;
+    }
+
     public boolean contains(float x, float y) {
         return contains(x, y, 0, 0);
     }
