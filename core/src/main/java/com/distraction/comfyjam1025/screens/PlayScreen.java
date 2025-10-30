@@ -27,6 +27,8 @@ public class PlayScreen extends Screen {
     private final TextEntity swapText;
     private final TextEntity rotateText;
 
+    private boolean done;
+
     public PlayScreen(Context context, int year) {
         super(context);
 
@@ -97,7 +99,8 @@ public class PlayScreen extends Screen {
     private boolean isDone() {
         for (int row = 0; row < puzzle.length; row++) {
             for (int col = 0; col < puzzle[row].length; col++) {
-                if (puzzle[row][col].id != row * numRows + col || puzzle[row][col].rotateIndex != 0) {
+                PuzzlePiece cell = puzzle[row][col];
+                if (cell.id != row * numRows + col || cell.rotateIndex != 0 || !cell.atDestination()) {
                     return false;
                 }
             }
@@ -108,6 +111,8 @@ public class PlayScreen extends Screen {
     @Override
     public void input() {
         if (ignoreInput) return;
+
+        if (done) return;
 
         m.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         unproject();
@@ -158,8 +163,9 @@ public class PlayScreen extends Screen {
         for (PuzzlePiece[] row : puzzle) {
             for (PuzzlePiece cell : row) cell.update(dt);
         }
-
-        if (isDone()) {
+        if (!done && isDone()) {
+            done = true;
+            context.audio.playSound("puzzlefinish");
         }
     }
 

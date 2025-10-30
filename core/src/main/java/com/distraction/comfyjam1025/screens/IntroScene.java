@@ -32,7 +32,7 @@ public class IntroScene extends Screen {
         new TextData("I suppose that's alright.", 4),
         new TextData("I've had a quiet life.", 4),
         new TextData("Maybe that's enough.", 4),
-        new TextData("", 2),
+        new TextData("", 4),
         new TextData("Hmm? Someone's coming.", 4)
     };
 
@@ -65,7 +65,7 @@ public class IntroScene extends Screen {
     private float leafTime;
 
     private final float gravex = 350;
-    private final float panx = gravex + 30;
+    private final float panx = gravex + 10;
 
     private float textTime;
     private float nextTextTime = 4;
@@ -112,6 +112,8 @@ public class IntroScene extends Screen {
         in.update(dt);
         out.update(dt);
 
+        int girlFrame = girl.animation.frame;
+
         leafTime -= dt;
         if (leafTime <= 0) {
             leafTime = MathUtils.random(0.3f, 1.4f);
@@ -121,6 +123,9 @@ public class IntroScene extends Screen {
         }
 
         if (action == Action.INTRO_PAN) {
+            if (textTime > 3.5 && !context.audio.isPlaying()) {
+                context.audio.playMusic("forgotten", 0.5f, false);
+            }
             textTime += dt;
             if (textTime > nextTextTime) {
                 textIndex++;
@@ -155,6 +160,10 @@ public class IntroScene extends Screen {
                 action = Action.GIRL_GIFT;
                 girl.animation.setAnimation(Arrays.copyOfRange(context.getImage("girl").split(22, 55)[0], 2, 4), 1.5f);
             }
+            if (girlFrame == 0 && girl.animation.frame != girlFrame) {
+                float vol = MathUtils.clamp(0.2f - 0.2f * (panx - girl.x) / (Constants.WIDTH / 2f), 0, 0.2f);
+                context.audio.playSound("step", vol);
+            }
         } else if (action == Action.GIRL_GIFT) {
             girl.update(dt);
             if (girl.animation.finishCount == 1 && girl.animation.frame == 1) {
@@ -188,6 +197,10 @@ public class IntroScene extends Screen {
                 text.ta = 0f;
             }
             text.update(dt);
+            if (girlFrame == 0 && girl.animation.frame != girlFrame && girl.x > panx - Constants.WIDTH / 2f) {
+                float vol = MathUtils.clamp(0.2f - 0.2f * (panx - girl.x) / (Constants.WIDTH / 2f), 0, 0.2f);
+                context.audio.playSound("step", vol);
+            }
         }
 
         for (int i = particles.size() - 1; i >= 0; i--) {
