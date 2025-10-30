@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Constants {
 
-    public static final String TITLE = "unknown";
+    public static final String TITLE = "The Heart Left Behind";
     public static final int WIDTH = 320;
     public static final int HEIGHT = 180;
     public static final int SCALE = 3;

@@ -11,9 +11,13 @@ import com.distraction.comfyjam1025.entity.Leaf;
 import com.distraction.comfyjam1025.entity.TextEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GraveScene extends Screen {
+
+    private static final float GIRL_SPEED = 30;
+    private static final float GIRL_START = -20;
 
     private static final TextData[][] TEXT_DATA = new TextData[][]{
         {
@@ -21,6 +25,17 @@ public class GraveScene extends Screen {
             new TextData("Again?\nThe same girl came back.", 5f),
             new TextData("I still don't know\nwhat she's doing here.", 5f),
             new TextData("I thought nobody cared.", 5f)
+        },
+        {
+            new TextData("", 2f),
+            new TextData("A new gift.\nIt's a letter.", 5f),
+            new TextData("I hear a soft whisper.", 5f),
+            new TextData("\"Thank you\"", 5f)
+        },
+        {
+            new TextData("", 4f),
+            new TextData("In her hands,\nsomething small...", 5f),
+            new TextData("fragile and\nstitched with care.", 5f)
         }
     };
 
@@ -71,16 +86,26 @@ public class GraveScene extends Screen {
         grave = context.getImage("grave");
 
         girlImages = context.getImage("girl").split(22, 55)[year - 1];
-        girl = new ImageEntity(context, girlImages, 0.5f);
+        girl = new ImageEntity(context, Arrays.copyOfRange(girlImages, 0, 2), 0.5f);
+        girl.x = GIRL_START;
+        girl.y = 35;
 
         texts = TEXT_DATA[year - 2];
         textTime = texts[0].duration;
 
-        text = new TextEntity(context, context.getFont(Context.M5X716), "", 20, 110);
+        text = new TextEntity(context, context.getFont(Context.M5X716), "", 20, 100);
         text.setColor(1, 1, 1, 0);
         text.ta = 0;
+        text.vAlignment = TextEntity.VAlignment.BOTTOM;
 
         particles = new ArrayList<>();
+        for (int i = 30; i >= 0; i--) {
+            leafTime = MathUtils.random(0.3f, 1.4f);
+            float x = MathUtils.random(gravex + 25, gravex + 25 + 65);
+            float y = MathUtils.random(97, 97 + 85);
+            particles.add(new Leaf(context, x, y, -1f * MathUtils.random(1, 3), -1f * MathUtils.random(3, 6)));
+            for (ImageEntity p : particles) p.update(leafTime);
+        }
     }
 
     @Override
@@ -102,27 +127,57 @@ public class GraveScene extends Screen {
             particles.add(new Leaf(context, x, y, -1f * MathUtils.random(1, 3), -1f * MathUtils.random(3, 6)));
         }
 
-        if (action == Action.GIRL_ENTER) {
-            textTime -= dt;
-            if (textTime <= 0) {
+        textTime -= dt;
+        if (textTime <= 0) {
+            if (textIndex < texts.length - 1) {
                 textIndex++;
-                if (textIndex < texts.length) {
-                    textTime = texts[textIndex].duration;
-                    text.setText(texts[textIndex].text);
-                    text.ta = 1f;
-                }
-            } else if (textTime <= 0.5f) {
-                text.ta = 0f;
+                textTime = texts[textIndex].duration;
+                text.setText(texts[textIndex].text);
+                text.ta = 1f;
+            }
+        } else if (textTime <= 0.5f) {
+            text.ta = 0f;
+        }
+
+        if (action == Action.GIRL_ENTER) {
+            girl.update(dt);
+            girl.x += GIRL_SPEED * dt;
+            if (girl.x >= gravex + 15) {
+                girl.x = gravex + 15;
+                action = Action.GIRL_GIFT;
+                girl.animation.setAnimation(Arrays.copyOfRange(girlImages, 2, 4), 1.5f);
+            }
+            if (girlFrame == 0 && girl.animation.frame != girlFrame) {
+                float vol = MathUtils.clamp(0.2f * girl.x / (Constants.WIDTH / 2f), 0, 0.2f);
+                context.audio.playSound("step", vol);
             }
         } else if (action == Action.GIRL_GIFT) {
-
+            girl.update(dt);
+            if (girl.animation.finishCount == 1 && girl.animation.frame == 1) {
+                action = Action.GIRL_LEAVE;
+                girl.hflip = true;
+                girl.animation.setAnimation(Arrays.copyOfRange(girlImages, 0, 2), 0.5f);
+            }
         } else if (action == Action.GIRL_LEAVE) {
-
-        } else if (action == Action.FADE_OUT) {
-
+            girl.update(dt);
+            girl.x -= GIRL_SPEED * dt;
+            if (girl.x < GIRL_START && textIndex >= texts.length - 1) {
+                action = Action.FADE_OUT;
+                out.start();
+            }
+            if (girlFrame == 0 && girl.animation.frame != girlFrame && girl.x > 0) {
+                float vol = MathUtils.clamp(0.2f * girl.x / (Constants.WIDTH / 2f), 0, 0.2f);
+                context.audio.playSound("step", vol);
+            }
         }
 
         text.update(dt);
+
+        for (int i = particles.size() - 1; i >= 0; i--) {
+            ImageEntity p = particles.get(i);
+            p.update(dt);
+            if (p.remove) particles.remove(p);
+        }
     }
 
     @Override
@@ -141,6 +196,8 @@ public class GraveScene extends Screen {
         sb.draw(treeBg, 0, 0);
         sb.draw(grave, gravex, 8);
         sb.draw(tree, gravex, 9);
+        girl.render(sb);
+        for (ImageEntity p : particles) p.render(sb);
 
         sb.setColor(Constants.SCENE_1_GRASS);
         sb.draw(pixel, 0, 0, Constants.WIDTH, 8);

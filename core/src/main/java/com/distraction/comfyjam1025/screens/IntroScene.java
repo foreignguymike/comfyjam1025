@@ -1,6 +1,7 @@
 package com.distraction.comfyjam1025.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -42,6 +43,7 @@ public class IntroScene extends Screen {
     };
 
     private enum Action {
+        TITLE,
         INTRO_PAN,
         GIRL_ENTER,
         GIRL_GIFT,
@@ -49,7 +51,7 @@ public class IntroScene extends Screen {
         FADE_OUT
     }
 
-    private Action action = Action.INTRO_PAN;
+    private Action action = Action.TITLE;
 
     private final TextureRegion grass1;
     private final TextureRegion grass2;
@@ -73,6 +75,9 @@ public class IntroScene extends Screen {
     private int textIndex = -1;
     private TextData[] texts = TEXT_DATA_1;
 
+    private final TextEntity titleText;
+    private final TextEntity startText;
+
     public IntroScene(Context context) {
         super(context);
 
@@ -87,7 +92,7 @@ public class IntroScene extends Screen {
         grave = context.getImage("grave");
 
         ignoreInput = true;
-        in = new Transition(context, Transition.Type.FLASH_IN, 4f, () -> ignoreInput = false);
+        in = new Transition(context, Transition.Type.FLASH_IN, 2f, () -> ignoreInput = false);
         in.start();
 
         particles = new ArrayList<>();
@@ -95,10 +100,26 @@ public class IntroScene extends Screen {
         girl = new ImageEntity(context, Arrays.copyOfRange(context.getImage("girl").split(22, 55)[0], 0, 2), 0.5f);
         girl.x = -200;
         girl.y = 35;
+
+        titleText = new TextEntity(context, context.getFont(Context.M5X716), Constants.TITLE, Constants.WIDTH / 2f, 130, TextEntity.HAlignment.CENTER, TextEntity.VAlignment.CENTER);
+        titleText.a = titleText.ta = 0;
+        startText = new TextEntity(context, context.getFont(Context.M5X716), "Start", Constants.WIDTH / 2f, 40, TextEntity.HAlignment.CENTER, TextEntity.VAlignment.CENTER);
+        startText.a = startText.ta = 0;
     }
 
     @Override
     public void input() {
+        if (ignoreInput) return;
+
+        if (action == Action.TITLE) {
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && textTime > 4) {
+                titleText.ta = 0;
+                startText.ta = 0;
+                textTime = 0;
+                action = Action.INTRO_PAN;
+                context.audio.playMusic("forgotten", 0.5f, false);
+            }
+        }
     }
 
     @Override
@@ -116,11 +137,22 @@ public class IntroScene extends Screen {
             particles.add(new Leaf(context, x, y, -1f * MathUtils.random(1, 3), -1f * MathUtils.random(3, 6)));
         }
 
-        if (action == Action.INTRO_PAN) {
-            if (textTime > 3.5 && !context.audio.isPlaying()) {
-                context.audio.playMusic("forgotten", 0.5f, false);
-            }
+        titleText.update(dt);
+        startText.update(dt);
+
+        if (action == Action.TITLE) {
             textTime += dt;
+            if (textTime > 2) {
+                titleText.ta = 1;
+            }
+            if (textTime > 4) {
+                startText.ta = 1;
+            }
+        } else if (action == Action.INTRO_PAN) {
+            textTime += dt;
+//            if (textTime > 3.5 && !context.audio.isPlaying()) {
+//                context.audio.playMusic("forgotten", 0.5f, false);
+//            }
             if (textTime > nextTextTime) {
                 textIndex++;
                 if (textIndex < texts.length) {
@@ -224,6 +256,8 @@ public class IntroScene extends Screen {
         }
 
         sb.setColor(1, 1, 1, 1);
+        titleText.render(sb);
+        startText.render(sb);
         sb.draw(grave, gravex, 8);
         sb.draw(tree, gravex, 9);
         girl.render(sb);

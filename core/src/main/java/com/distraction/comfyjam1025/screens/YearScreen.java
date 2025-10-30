@@ -14,6 +14,7 @@ public class YearScreen extends Screen {
         super(context);
         text = new TextEntity(context, context.getFont(Context.VCR20), "YEAR " + year, Constants.WIDTH / 2f, Constants.HEIGHT / 2f, TextEntity.HAlignment.CENTER);
         text.setColor(1, 1, 1, 1);
+        text.vAlignment = TextEntity.VAlignment.CENTER;
 
         in = new Transition(context, Transition.Type.FLASH_IN, 2f);
         in.setFlashColor(Color.BLACK);

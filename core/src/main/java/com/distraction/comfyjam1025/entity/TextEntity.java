@@ -39,6 +39,12 @@ public class TextEntity extends Entity {
         this.hAlignment = hAlignment;
     }
 
+    public TextEntity(Context context, BitmapFont font, String text, float x, float y, HAlignment hAlignment, VAlignment vAlignment) {
+        this(context, font, text, x, y);
+        this.hAlignment = hAlignment;
+        this.vAlignment = vAlignment;
+    }
+
     public TextEntity(Context context, BitmapFont font, String text, float x, float y) {
         super(context);
         this.font = font;

@@ -26,13 +26,17 @@ public class PlayScreen extends Screen {
             "passing by...",
         "That photo...\n" +
             "I thought I lost it.\n" +
+            "It's my most\ncherished possession.\n" +
             "How would she find it?",
         "I don't know what I did\n" +
-            "to deserve this...\n" +
+            "to deserve gratitude...\n" +
             "but for the first time in\n" +
             "a long while,\n" +
-            "I don't feel forgotten."
-
+            "I don't feel forgotten.",
+        "I understand now.\n" +
+            "All this time,\nI thought I had faded.\n" +
+            "She thanks me\nyear after year.\n" +
+            "I'm glad that I\nhelped someone.\n"
     };
 
     private static final int GRID_WIDTH = 120;
@@ -73,8 +77,8 @@ public class PlayScreen extends Screen {
         rmb = new ImageEntity(context, context.getImage("mouse"));
         rmb.setPosition(uix, 55);
         rmb.hflip = true;
-        swapText = new TextEntity(context, context.getFont(Context.M5X716), "Swap", uix, 135, TextEntity.HAlignment.CENTER);
-        rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", uix, 75, TextEntity.HAlignment.CENTER);
+        swapText = new TextEntity(context, context.getFont(Context.M5X716), "Swap", uix, 140, TextEntity.HAlignment.CENTER);
+        rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", uix, 80, TextEntity.HAlignment.CENTER);
 
         puzzleBg = context.getImage("puzzlebg");
         puzzle = new PuzzlePiece[numRows][numRows];
@@ -112,8 +116,13 @@ public class PlayScreen extends Screen {
         in.setFlashColor(Color.BLACK);
         in.start();
 
-        out = new Transition(context, Transition.Type.FLASH_OUT, 1f, () -> context.sm.replace(new YearScreen(context, year + 1)));
-        out.setFlashColor(Color.BLACK);
+        if (year == 4) {
+            out = new Transition(context, Transition.Type.FLASH_OUT, 1f, () -> context.sm.replace(new IntroScene(context)));
+            out.setFlashColor(Color.WHITE);
+        } else {
+            out = new Transition(context, Transition.Type.FLASH_OUT, 1f, () -> context.sm.replace(new YearScreen(context, year + 1)));
+            out.setFlashColor(Color.BLACK);
+        }
 
         text = new TextEntity(context, context.getFont(Context.M5X716), SCRIPTS[year - 1], Constants.WIDTH / 2f + 80, Constants.HEIGHT / 2f + GRID_WIDTH / 2f - 10);
         text.setColor(1, 1, 1, 0);
