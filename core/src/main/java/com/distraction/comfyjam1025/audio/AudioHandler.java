@@ -20,6 +20,7 @@ public class AudioHandler {
 
         sounds = new HashMap<>();
         addSound("step", "sfx/step.ogg");
+        addSound("swap", "sfx/swap.ogg");
         addSound("puzzlefinish", "sfx/puzzlefinish.ogg");
     }
 

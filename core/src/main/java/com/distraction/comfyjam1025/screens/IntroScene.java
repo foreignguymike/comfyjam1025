@@ -41,7 +41,7 @@ public class IntroScene extends Screen {
         new TextData("She left something...", 4)
     };
 
-    enum Action {
+    private enum Action {
         INTRO_PAN,
         GIRL_ENTER,
         GIRL_GIFT,

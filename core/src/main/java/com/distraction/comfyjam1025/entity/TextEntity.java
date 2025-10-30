@@ -24,7 +24,7 @@ public class TextEntity extends Entity {
     public Alignment alignment = Alignment.LEFT;
 
     private String currentText = "";
-    private Color color = Color.WHITE;
+    private final Color color = new Color(1, 1, 1, 1);
 
     public float ta = 1;
 
@@ -45,7 +45,7 @@ public class TextEntity extends Entity {
     public void setText(String text) {
         if (!Objects.equals(currentText, text)) {
             currentText = text;
-            glyphLayout.setText(font, currentText, 0, currentText.length(), color, 0, Align.left, false, null);
+            glyphLayout.setText(font, currentText);
             w = glyphLayout.width;
             h = glyphLayout.height;
         }
@@ -54,7 +54,8 @@ public class TextEntity extends Entity {
     public void setColor(float r, float g, float b, float a) {
         if (color.r != r || color.g != g || color.b != b || color.a != a) {
             color.set(r, g, b, a);
-            glyphLayout.setText(font, currentText, 0, currentText.length(), color, 0, Align.left, false, null);
+            font.setColor(color);
+            glyphLayout.setText(font, currentText);
         }
     }
 

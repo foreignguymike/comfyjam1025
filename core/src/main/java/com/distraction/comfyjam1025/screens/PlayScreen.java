@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.distraction.comfyjam1025.Constants;
 import com.distraction.comfyjam1025.Context;
 import com.distraction.comfyjam1025.entity.ImageEntity;
@@ -16,6 +17,34 @@ import java.util.List;
 
 public class PlayScreen extends Screen {
 
+    private static final String[][] SCRIPTS = {
+        {
+            "A flower?",
+            "People leave those for the",
+            "ones they care about.",
+            "Maybe she was just",
+            "passing by..."
+        },
+        {
+            "That photo...",
+            "I thought I lost it.",
+            "How would she find it?"
+        },
+        {
+            "I don't know what I did",
+            "to deserve this...",
+            "but for the first time in",
+            "a long while,",
+            "I don't feel forgotten."
+        },
+        {
+
+        }
+    };
+
+    private static final int GRID_WIDTH = 120;
+    private static final float PAN_SPEED = 30;
+
     private final int numRows;
 
     private final TextureRegion puzzleBg;
@@ -27,7 +56,14 @@ public class PlayScreen extends Screen {
     private final TextEntity swapText;
     private final TextEntity rotateText;
 
+    private final TextEntity[] texts;
+    private final TextureRegion next;
+    private float nextTime;
+
     private boolean done;
+    private float doneTime = 6f;
+
+    private float flash = 0;
 
     public PlayScreen(Context context, int year) {
         super(context);
@@ -35,19 +71,21 @@ public class PlayScreen extends Screen {
         if (year == 4) numRows = 4;
         else numRows = 3;
 
+        float uix = 50;
+
         lmb = new ImageEntity(context, context.getImage("mouse"));
-        lmb.setPosition(270, 115);
+        lmb.setPosition(uix, 115);
         rmb = new ImageEntity(context, context.getImage("mouse"));
-        rmb.setPosition(270, 55);
+        rmb.setPosition(uix, 55);
         rmb.hflip = true;
-        swapText = new TextEntity(context, context.getFont(Context.M5X716), "Swap", 270, 135, TextEntity.Alignment.CENTER);
-        rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", 270, 75, TextEntity.Alignment.CENTER);
+        swapText = new TextEntity(context, context.getFont(Context.M5X716), "Swap", uix, 135, TextEntity.Alignment.CENTER);
+        rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", uix, 75, TextEntity.Alignment.CENTER);
 
         puzzleBg = context.getImage("puzzlebg");
         puzzle = new PuzzlePiece[numRows][numRows];
-        int tileSize = 120 / numRows;
-        float sx = Constants.WIDTH / 2f - 60;
-        float sy = Constants.HEIGHT / 2f + 60;
+        int tileSize = GRID_WIDTH / numRows;
+        float sx = Constants.WIDTH / 2f - GRID_WIDTH / 2f;
+        float sy = Constants.HEIGHT / 2f + GRID_WIDTH / 2f;
         TextureRegion[][] images = context.getImage("puzzle" + year).split(tileSize, tileSize);
         for (int row = 0; row < puzzle.length; row++) {
             for (int col = 0; col < puzzle[row].length; col++) {
@@ -79,12 +117,27 @@ public class PlayScreen extends Screen {
         in.setFlashColor(Color.BLACK);
         in.start();
 
+        out = new Transition(context, Transition.Type.FLASH_OUT, 1f, () -> context.sm.replace(new YearScreen(context, year + 1)));
+        out.setFlashColor(Color.BLACK);
+
+        String[] script = SCRIPTS[year - 1];
+        float th = 20 * script.length;
+        texts = new TextEntity[script.length];
+        for (int i = 0; i < script.length; i++) {
+            TextEntity text = new TextEntity(context, context.getFont(Context.M5X716), script[i], Constants.WIDTH / 2f + 80, Constants.HEIGHT / 2f + th / 2 - i * 20);
+            text.setColor(1, 1, 1, 0);
+            text.a = 0;
+            text.ta = 0;
+            texts[i] = text;
+        }
+
+        next = context.getImage("next");
     }
 
     private void updatePositions() {
-        int tileSize = 120 / numRows;
-        float sx = Constants.WIDTH / 2f - 60;
-        float sy = Constants.HEIGHT / 2f + 60;
+        int tileSize = GRID_WIDTH / numRows;
+        float sx = Constants.WIDTH / 2f - GRID_WIDTH / 2f;
+        float sy = Constants.HEIGHT / 2f + GRID_WIDTH / 2f;
         for (int row = 0; row < puzzle.length; row++) {
             for (int col = 0; col < puzzle[row].length; col++) {
                 puzzle[row][col].setDest(
@@ -112,43 +165,49 @@ public class PlayScreen extends Screen {
     public void input() {
         if (ignoreInput) return;
 
-        if (done) return;
-
         m.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         unproject();
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            for (PuzzlePiece[] row : puzzle) {
-                for (PuzzlePiece cell : row) {
-                    if (!cell.atDestination()) continue;
-                    if (cell.contains(m.x, m.y)) {
-                        if (selected == null) {
-                            selected = cell;
-                        } else if (selected == cell) {
-                            selected = null;
-                        } else {
-                            int r1 = selected.row;
-                            int c1 = selected.col;
-                            int r2 = cell.row;
-                            int c2 = cell.col;
+            if (!done) {
+                for (PuzzlePiece[] row : puzzle) {
+                    for (PuzzlePiece cell : row) {
+                        if (!cell.atDestination()) continue;
+                        if (cell.contains(m.x, m.y)) {
+                            if (selected == null) {
+                                selected = cell;
+                            } else if (selected == cell) {
+                                selected = null;
+                            } else {
+                                int r1 = selected.row;
+                                int c1 = selected.col;
+                                int r2 = cell.row;
+                                int c2 = cell.col;
 
-                            PuzzlePiece temp = puzzle[r1][c1];
-                            puzzle[r1][c1] = puzzle[r2][c2];
-                            puzzle[r1][c1].setDest(temp.x, temp.y);
-                            puzzle[r2][c2] = temp;
-                            puzzle[r2][c2].setDest(puzzle[r1][c1].x, puzzle[r1][c1].y);
-                            updatePositions();
-                            selected = null;
+                                PuzzlePiece temp = puzzle[r1][c1];
+                                puzzle[r1][c1] = puzzle[r2][c2];
+                                puzzle[r1][c1].setDest(temp.x, temp.y);
+                                puzzle[r2][c2] = temp;
+                                puzzle[r2][c2].setDest(puzzle[r1][c1].x, puzzle[r1][c1].y);
+                                updatePositions();
+                                selected = null;
+                                context.audio.playSound("swap", 0.2f);
+                            }
+                            return;
                         }
-                        return;
                     }
                 }
+            } else if (doneTime < 0) {
+                ignoreInput = true;
+                out.start();
             }
         } else if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            for (PuzzlePiece[] row : puzzle) {
-                for (PuzzlePiece cell : row) {
-                    if (cell.contains(m.x, m.y)) {
-                        cell.rotate();
+            if (!done) {
+                for (PuzzlePiece[] row : puzzle) {
+                    for (PuzzlePiece cell : row) {
+                        if (cell.contains(m.x, m.y)) {
+                            cell.rotate();
+                        }
                     }
                 }
             }
@@ -165,7 +224,22 @@ public class PlayScreen extends Screen {
         }
         if (!done && isDone()) {
             done = true;
-            context.audio.playSound("puzzlefinish");
+            selected = null;
+            context.audio.playSound("puzzlefinish", 0.5f);
+            flash = 1f;
+        }
+        flash -= dt;
+        if (done) {
+            cam.position.x = MathUtils.clamp(cam.position.x + PAN_SPEED * dt, Constants.WIDTH / 2f, Constants.WIDTH / 2f + 80);
+            cam.update();
+            doneTime -= dt;
+            if (doneTime < 3) {
+                for (TextEntity t : texts) {
+                    t.ta = 1;
+                    t.update(dt);
+                }
+            }
+            if (doneTime < 0) nextTime += dt;
         }
     }
 
@@ -173,15 +247,18 @@ public class PlayScreen extends Screen {
     public void render() {
         sb.begin();
 
-        sb.setProjectionMatrix(cam.combined);
+        sb.setProjectionMatrix(uiCam.combined);
         sb.setColor(Constants.PUZZLE_BG);
         sb.draw(pixel, 0, 0, Constants.WIDTH, Constants.HEIGHT);
 
+        sb.setProjectionMatrix(cam.combined);
         sb.setColor(1, 1, 1, 1);
-        swapText.render(sb);
-        lmb.render(sb);
-        rotateText.render(sb);
-        rmb.render(sb);
+        if (!done) {
+            swapText.render(sb);
+            lmb.render(sb);
+            rotateText.render(sb);
+            rmb.render(sb);
+        }
 
         sb.draw(puzzleBg, Constants.WIDTH / 2f - puzzleBg.getRegionWidth() / 2f, Constants.HEIGHT / 2f - puzzleBg.getRegionHeight() / 2f);
         for (PuzzlePiece[] row : puzzle) {
@@ -193,6 +270,20 @@ public class PlayScreen extends Screen {
             sb.draw(pixel, selected.x - selected.w / 2f - 1, selected.y - selected.h / 2f - 1, 1, selected.h + 2);
             sb.draw(pixel, selected.x - selected.w / 2f - 1, selected.y + selected.h / 2f, selected.w + 2, 1);
             sb.draw(pixel, selected.x + selected.w / 2f, selected.y - selected.h / 2f - 1, 1, selected.h + 2);
+        }
+
+        sb.setColor(1, 1, 1, 1);
+        if (done) {
+            for (TextEntity t : texts) t.render(sb);
+            if (doneTime < 0 && (nextTime % 0.9f) < 0.45f) {
+                sb.draw(next, 380, 20);
+            }
+        }
+
+        sb.setProjectionMatrix(uiCam.combined);
+        if (flash > 0) {
+            sb.setColor(1, 1, 1, flash);
+            sb.draw(pixel, 0, 0, Constants.WIDTH, Constants.HEIGHT);
         }
 
         sb.setColor(1, 1, 1, 1);
