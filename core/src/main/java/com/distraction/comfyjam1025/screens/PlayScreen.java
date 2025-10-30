@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.distraction.comfyjam1025.Constants;
 import com.distraction.comfyjam1025.Context;
 import com.distraction.comfyjam1025.entity.ImageEntity;
+import com.distraction.comfyjam1025.entity.Leaf;
 import com.distraction.comfyjam1025.entity.PuzzlePiece;
 import com.distraction.comfyjam1025.entity.TextEntity;
 
@@ -17,29 +18,21 @@ import java.util.List;
 
 public class PlayScreen extends Screen {
 
-    private static final String[][] SCRIPTS = {
-        {
-            "A flower?",
-            "People leave those for the",
-            "ones they care about.",
-            "Maybe she was just",
-            "passing by..."
-        },
-        {
-            "That photo...",
-            "I thought I lost it.",
-            "How would she find it?"
-        },
-        {
-            "I don't know what I did",
-            "to deserve this...",
-            "but for the first time in",
-            "a long while,",
+    private static final String[] SCRIPTS = {
+        "A flower?\n" +
+            "People leave those for the\n" +
+            "ones they care about.\n" +
+            "Maybe she was just\n" +
+            "passing by...",
+        "That photo...\n" +
+            "I thought I lost it.\n" +
+            "How would she find it?",
+        "I don't know what I did\n" +
+            "to deserve this...\n" +
+            "but for the first time in\n" +
+            "a long while,\n" +
             "I don't feel forgotten."
-        },
-        {
 
-        }
     };
 
     private static final int GRID_WIDTH = 120;
@@ -56,7 +49,7 @@ public class PlayScreen extends Screen {
     private final TextEntity swapText;
     private final TextEntity rotateText;
 
-    private final TextEntity[] texts;
+    private final TextEntity text;
     private final TextureRegion next;
     private float nextTime;
 
@@ -65,11 +58,13 @@ public class PlayScreen extends Screen {
 
     private float flash = 0;
 
+    private final List<ImageEntity> particles;
+    private float leafTime;
+
     public PlayScreen(Context context, int year) {
         super(context);
 
-        if (year == 4) numRows = 4;
-        else numRows = 3;
+        numRows = 3;
 
         float uix = 50;
 
@@ -78,8 +73,8 @@ public class PlayScreen extends Screen {
         rmb = new ImageEntity(context, context.getImage("mouse"));
         rmb.setPosition(uix, 55);
         rmb.hflip = true;
-        swapText = new TextEntity(context, context.getFont(Context.M5X716), "Swap", uix, 135, TextEntity.Alignment.CENTER);
-        rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", uix, 75, TextEntity.Alignment.CENTER);
+        swapText = new TextEntity(context, context.getFont(Context.M5X716), "Swap", uix, 135, TextEntity.HAlignment.CENTER);
+        rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", uix, 75, TextEntity.HAlignment.CENTER);
 
         puzzleBg = context.getImage("puzzlebg");
         puzzle = new PuzzlePiece[numRows][numRows];
@@ -106,8 +101,8 @@ public class PlayScreen extends Screen {
                 puzzle[row][col] = flat.get(index++);
                 puzzle[row][col].setCell(row, col);
                 puzzle[row][col].setPosition(
-                        sx + col * tileSize + tileSize / 2f,
-                        sy - row * tileSize - tileSize / 2f
+                    sx + col * tileSize + tileSize / 2f,
+                    sy - row * tileSize - tileSize / 2f
                 );
                 puzzle[row][col].randomRotate();
             }
@@ -120,18 +115,14 @@ public class PlayScreen extends Screen {
         out = new Transition(context, Transition.Type.FLASH_OUT, 1f, () -> context.sm.replace(new YearScreen(context, year + 1)));
         out.setFlashColor(Color.BLACK);
 
-        String[] script = SCRIPTS[year - 1];
-        float th = 20 * script.length;
-        texts = new TextEntity[script.length];
-        for (int i = 0; i < script.length; i++) {
-            TextEntity text = new TextEntity(context, context.getFont(Context.M5X716), script[i], Constants.WIDTH / 2f + 80, Constants.HEIGHT / 2f + th / 2 - i * 20);
-            text.setColor(1, 1, 1, 0);
-            text.a = 0;
-            text.ta = 0;
-            texts[i] = text;
-        }
+        text = new TextEntity(context, context.getFont(Context.M5X716), SCRIPTS[year - 1], Constants.WIDTH / 2f + 80, Constants.HEIGHT / 2f + GRID_WIDTH / 2f - 10);
+        text.setColor(1, 1, 1, 0);
+        text.a = 0;
+        text.ta = 0;
 
         next = context.getImage("next");
+
+        particles = new ArrayList<>();
     }
 
     private void updatePositions() {
@@ -141,8 +132,8 @@ public class PlayScreen extends Screen {
         for (int row = 0; row < puzzle.length; row++) {
             for (int col = 0; col < puzzle[row].length; col++) {
                 puzzle[row][col].setDest(
-                        sx + col * tileSize + tileSize / 2f,
-                        sy - row * tileSize - tileSize / 2f
+                    sx + col * tileSize + tileSize / 2f,
+                    sy - row * tileSize - tileSize / 2f
                 );
                 puzzle[row][col].setCell(row, col);
             }
@@ -230,16 +221,28 @@ public class PlayScreen extends Screen {
         }
         flash -= dt;
         if (done) {
-            cam.position.x = MathUtils.clamp(cam.position.x + PAN_SPEED * dt, Constants.WIDTH / 2f, Constants.WIDTH / 2f + 80);
-            cam.update();
             doneTime -= dt;
-            if (doneTime < 3) {
-                for (TextEntity t : texts) {
-                    t.ta = 1;
-                    t.update(dt);
-                }
+            if (doneTime < 5) {
+                cam.position.x = MathUtils.clamp(cam.position.x + PAN_SPEED * dt, Constants.WIDTH / 2f, Constants.WIDTH / 2f + 80);
+                cam.update();
+            }
+            if (doneTime < 2) {
+                text.ta = 1;
+                text.update(dt);
             }
             if (doneTime < 0) nextTime += dt;
+        }
+        leafTime -= dt;
+        if (leafTime <= 0) {
+            leafTime = MathUtils.random(0.3f, 1.4f);
+            float x = MathUtils.random(20, Constants.WIDTH + 80);
+            float y = Constants.HEIGHT + 10;
+            particles.add(new Leaf(context, x, y, -1f * MathUtils.random(1, 3), -1f * MathUtils.random(3, 6)));
+        }
+        for (int i = particles.size() - 1; i >= 0; i--) {
+            ImageEntity p = particles.get(i);
+            p.update(dt);
+            if (p.remove) particles.remove(p);
         }
     }
 
@@ -252,6 +255,8 @@ public class PlayScreen extends Screen {
         sb.draw(pixel, 0, 0, Constants.WIDTH, Constants.HEIGHT);
 
         sb.setProjectionMatrix(cam.combined);
+        for (ImageEntity p : particles) p.render(sb);
+
         sb.setColor(1, 1, 1, 1);
         if (!done) {
             swapText.render(sb);
@@ -274,7 +279,7 @@ public class PlayScreen extends Screen {
 
         sb.setColor(1, 1, 1, 1);
         if (done) {
-            for (TextEntity t : texts) t.render(sb);
+            text.render(sb);
             if (doneTime < 0 && (nextTime % 0.9f) < 0.45f) {
                 sb.draw(next, 380, 20);
             }

@@ -77,7 +77,6 @@ public class IntroScene extends Screen {
         super(context);
 
         text = new TextEntity(context, context.getFont(Context.M5X716), "", 20, 100);
-        text.setColor(1, 1, 1, 0);
         text.ta = 0;
 
         grass1 = context.getImage("grass1");
@@ -100,11 +99,6 @@ public class IntroScene extends Screen {
 
     @Override
     public void input() {
-        if (ignoreInput) return;
-
-        m.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-        unproject();
-
     }
 
     @Override
@@ -119,7 +113,7 @@ public class IntroScene extends Screen {
             leafTime = MathUtils.random(0.3f, 1.4f);
             float x = MathUtils.random(gravex + 25, gravex + 25 + 65);
             float y = MathUtils.random(97, 97 + 85);
-            particles.add(new Leaf(context, x, y));
+            particles.add(new Leaf(context, x, y, -1f * MathUtils.random(1, 3), -1f * MathUtils.random(3, 6)));
         }
 
         if (action == Action.INTRO_PAN) {

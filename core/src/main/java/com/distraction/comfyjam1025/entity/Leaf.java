@@ -12,10 +12,12 @@ public class Leaf extends ImageEntity {
     private float xo;
     private float yo;
 
-    public Leaf(Context context, float x, float y) {
+    public Leaf(Context context, float x, float y, float dx, float dy) {
         super(context, context.getImage("leaves").split(5, 5)[0][MathUtils.random(0, 3)]);
         this.x = x;
         this.y = y;
+        this.dx = dx;
+        this.dy = dy;
     }
 
     @Override
@@ -25,8 +27,8 @@ public class Leaf extends ImageEntity {
         time += dt;
         a = MathUtils.clamp(time, 0, 1);
 
-        x -= dt * SPEED / 5;
-        y -= dt * SPEED;
+        x += dt * dx;
+        y += dt * dy;
 
         float sin = MathUtils.sin(time);
         xo = 6 * sin;

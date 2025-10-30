@@ -12,14 +12,17 @@ public class YearScreen extends Screen {
 
     public YearScreen(Context context, int year) {
         super(context);
-        text = new TextEntity(context, context.getFont(Context.VCR20), "YEAR " + year, Constants.WIDTH / 2f, Constants.HEIGHT / 2f, TextEntity.Alignment.CENTER);
+        text = new TextEntity(context, context.getFont(Context.VCR20), "YEAR " + year, Constants.WIDTH / 2f, Constants.HEIGHT / 2f, TextEntity.HAlignment.CENTER);
         text.setColor(1, 1, 1, 1);
 
         in = new Transition(context, Transition.Type.FLASH_IN, 2f);
         in.setFlashColor(Color.BLACK);
         in.start();
         out = new Transition(context, Transition.Type.FLASH_OUT, 2f);
-        out.setCallback(() -> context.sm.replace(new PlayScreen(context, year)));
+        out.setCallback(() -> {
+            if (year == 1) context.sm.replace(new PlayScreen(context, year));
+            else context.sm.replace(new GraveScene(context, year));
+        });
         out.setFlashColor(Color.BLACK);
     }
 
@@ -34,7 +37,7 @@ public class YearScreen extends Screen {
         out.update(dt);
 
         time += dt;
-        if (time >= 3 && !out.started()) {
+        if (time >= 2 && !out.started()) {
             out.start();
         }
     }

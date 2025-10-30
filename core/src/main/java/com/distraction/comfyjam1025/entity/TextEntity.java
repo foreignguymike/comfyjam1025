@@ -5,32 +5,38 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Align;
 import com.distraction.comfyjam1025.Context;
 
 import java.util.Objects;
 
 public class TextEntity extends Entity {
 
-    public enum Alignment {
+    public enum HAlignment {
         LEFT,
         CENTER,
         RIGHT
     }
 
+    public enum VAlignment {
+        TOP,
+        CENTER,
+        BOTTOM
+    }
+
     private final GlyphLayout glyphLayout;
     private final BitmapFont font;
 
-    public Alignment alignment = Alignment.LEFT;
+    public HAlignment hAlignment = HAlignment.LEFT;
+    public VAlignment vAlignment = VAlignment.TOP;
 
     private String currentText = "";
     private final Color color = new Color(1, 1, 1, 1);
 
     public float ta = 1;
 
-    public TextEntity(Context context, BitmapFont font, String text, float x, float y, Alignment alignment) {
+    public TextEntity(Context context, BitmapFont font, String text, float x, float y, HAlignment hAlignment) {
         this(context, font, text, x, y);
-        this.alignment = alignment;
+        this.hAlignment = hAlignment;
     }
 
     public TextEntity(Context context, BitmapFont font, String text, float x, float y) {
@@ -73,13 +79,16 @@ public class TextEntity extends Entity {
     @Override
     public void render(SpriteBatch sb) {
         if (currentText.isEmpty()) return;
-        if (alignment == Alignment.CENTER) {
-            font.draw(sb, glyphLayout, x - glyphLayout.width / 2f, y + glyphLayout.height / 2f);
-        } else if (alignment == Alignment.LEFT) {
-            font.draw(sb, glyphLayout, x, y + glyphLayout.height / 2f);
-        } else {
-            font.draw(sb, glyphLayout, x - w + 1, y + glyphLayout.height / 2f);
-        }
+
+        float tx, ty;
+        if (hAlignment == HAlignment.CENTER) tx = x - w / 2f;
+        else if (hAlignment == HAlignment.LEFT) tx = x;
+        else tx = x - w;
+        if (vAlignment == VAlignment.CENTER) ty = y + h / 2f;
+        else if (vAlignment == VAlignment.TOP) ty = y;
+        else ty = y + h;
+
+        font.draw(sb, glyphLayout, tx, ty);
     }
 
 }
