@@ -18,29 +18,26 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import javax.sound.sampled.EnumControl;
-
 public class PlayScreen extends Screen {
 
     private static final String[] SCRIPTS = {
         "A flower?\n" +
             "People leave those for the\n" +
             "ones they care about.\n" +
-            "Maybe she was just\n" +
-            "passing by...",
+            "Maybe she was just passing by...",
         "That photo...\n" +
-            "I thought I lost it.\n" +
-            "It's my most\ncherished possession.\n" +
-            "How would she find it?",
+            "I kept it close near the end.\n" +
+            "It was my most cherished possession.\n" +
+            "How did she find it?",
         "I don't know what I did\n" +
             "to deserve gratitude...\n" +
-            "but for the first time in\n" +
-            "a long while,\n" +
+            "but for the first time in a long while,\n" +
             "I don't feel forgotten.",
-        "I understand now.\n" +
-            "All this time,\nI thought I had faded.\n" +
-            "She thanks me\nyear after year.\n" +
-            "I'm glad that I\nhelped someone.\n"
+        "I see it now.\n" +
+            "All this time, I thought I had faded.\n" +
+            "But she remembered year after year.\n" +
+            "Quietly, she carried my heart with her.\n" +
+            "And that’s enough."
     };
 
     private static final int GRID_WIDTH = 120;
@@ -83,8 +80,10 @@ public class PlayScreen extends Screen {
         rmb.setPosition(uix, 55);
         rmb.setSize(24, 30);
         rmb.hflip = true;
-        swapText = new TextEntity(context, context.getFont(Context.M5X716), "Swap", uix, 140, TextEntity.HAlignment.CENTER);
-        rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", uix, 80, TextEntity.HAlignment.CENTER);
+        swapText = new TextEntity(context, context.getFont(Context.CON26), "Swap", uix, 140, TextEntity.HAlignment.CENTER);
+        swapText.globalScale = textCam.viewportWidth / cam.viewportWidth;
+        rotateText = new TextEntity(context, context.getFont(Context.CON26), "Rotate", uix, 80, TextEntity.HAlignment.CENTER);
+        rotateText.globalScale = textCam.viewportWidth / cam.viewportWidth;
 
         puzzleBg = context.getImage("puzzlebg");
         puzzle = new PuzzlePiece[numRows][numRows];
@@ -132,10 +131,11 @@ public class PlayScreen extends Screen {
             out.setFlashColor(Color.BLACK);
         }
 
-        text = new TextEntity(context, context.getFont(Context.M5X716), SCRIPTS[year - 1], Constants.WIDTH / 2f + 80, Constants.HEIGHT / 2f + GRID_WIDTH / 2f - 10);
+        text = new TextEntity(context, context.getFont(Context.CON26), SCRIPTS[year - 1], Constants.WIDTH / 2f + 80, Constants.HEIGHT / 2f + GRID_WIDTH / 2f - 10);
         text.setColor(1, 1, 1, 0);
         text.a = 0;
         text.ta = 0;
+        text.globalScale = textCam.viewportWidth / cam.viewportWidth;
 
         next = context.getImage("next");
 
@@ -261,6 +261,8 @@ public class PlayScreen extends Screen {
             p.update(dt);
             if (p.remove) particles.remove(p);
         }
+        textCam.position.x = cam.position.x * text.globalScale;
+        textCam.update();
     }
 
     @Override
@@ -276,13 +278,15 @@ public class PlayScreen extends Screen {
 
         sb.setColor(1, 1, 1, 1);
         if (!done) {
+            sb.setProjectionMatrix(textCam.combined);
             swapText.render(sb);
-            lmb.render(sb);
             rotateText.render(sb);
+            sb.setProjectionMatrix(cam.combined);
+            lmb.render(sb);
             rmb.render(sb);
         }
 
-        Utils.drawCentered(sb, puzzleBg, Constants.WIDTH / 2f, Constants.HEIGHT / 2f , 126, 126);
+        Utils.drawCentered(sb, puzzleBg, Constants.WIDTH / 2f, Constants.HEIGHT / 2f, 126, 126);
         for (PuzzlePiece[] row : puzzle) {
             for (PuzzlePiece cell : row) cell.render(sb);
         }
@@ -296,9 +300,11 @@ public class PlayScreen extends Screen {
 
         sb.setColor(1, 1, 1, 1);
         if (done) {
+            sb.setProjectionMatrix(textCam.combined);
             text.render(sb);
             if (doneTime < 0 && (nextTime % 0.9f) < 0.45f) {
-                sb.draw(next, 380, 20, 8, 8);
+                sb.setProjectionMatrix(uiCam.combined);
+                sb.draw(next, 300, 10, 8, 8);
             }
         }
 

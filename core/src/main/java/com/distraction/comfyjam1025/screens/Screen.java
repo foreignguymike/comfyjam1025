@@ -18,6 +18,7 @@ public abstract class Screen {
     protected final Vector3 m;
     protected OrthographicCamera cam;
     protected OrthographicCamera uiCam;
+    protected OrthographicCamera textCam;
 
     protected SpriteBatch sb;
 
@@ -36,6 +37,8 @@ public abstract class Screen {
         cam.setToOrtho(false, Constants.WIDTH, Constants.HEIGHT);
         uiCam = new OrthographicCamera();
         uiCam.setToOrtho(false, Constants.WIDTH, Constants.HEIGHT);
+        textCam = new OrthographicCamera();
+        textCam.setToOrtho(false, Constants.WIDTH * 3, Constants.HEIGHT * 3);
 
         m = new Vector3();
 

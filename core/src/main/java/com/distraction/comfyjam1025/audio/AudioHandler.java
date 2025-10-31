@@ -42,7 +42,7 @@ public class AudioHandler {
         currentlyPlaying.play();
     }
 
-    public boolean isPlaying() {
+    public boolean isMusicPlaying() {
         return currentlyPlaying != null && currentlyPlaying.isPlaying();
     }
 

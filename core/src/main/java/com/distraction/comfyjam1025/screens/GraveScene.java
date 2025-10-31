@@ -22,15 +22,15 @@ public class GraveScene extends Screen {
     private static final TextData[][] TEXT_DATA = new TextData[][]{
         {
             new TextData("", 2f),
-            new TextData("Again?\nThe same girl came back.", 5f),
+            new TextData("Again. The same girl.", 5f),
             new TextData("I still don't know\nwhat she's doing here.", 5f),
             new TextData("I thought nobody cared.", 5f)
         },
         {
             new TextData("", 2f),
-            new TextData("A new gift.\nIt's a letter.", 5f),
-            new TextData("I hear a soft whisper.", 5f),
-            new TextData("\"Thank you\"", 5f)
+            new TextData("Another visit. Another gift.\nIt's a letter.", 5f),
+            new TextData("I hear a soft whisper.", 4f),
+            new TextData("\"Thank you\"", 3f)
         },
         {
             new TextData("", 4f),
@@ -95,10 +95,11 @@ public class GraveScene extends Screen {
         texts = TEXT_DATA[year - 2];
         textTime = texts[0].duration;
 
-        text = new TextEntity(context, context.getFont(Context.M5X716), "", 20, 100);
+        text = new TextEntity(context, context.getFont(Context.CON26), "", 20, 100);
         text.setColor(1, 1, 1, 0);
         text.ta = 0;
         text.vAlignment = TextEntity.VAlignment.BOTTOM;
+        text.globalScale = textCam.viewportWidth / cam.viewportWidth;
 
         particles = new ArrayList<>();
         for (int i = 30; i >= 0; i--) {
@@ -211,6 +212,7 @@ public class GraveScene extends Screen {
             sb.draw(grass3, 61 * i, 8, 61, 6);
         }
 
+        sb.setProjectionMatrix(textCam.combined);
         text.render(sb);
 
         sb.setProjectionMatrix(uiCam.combined);

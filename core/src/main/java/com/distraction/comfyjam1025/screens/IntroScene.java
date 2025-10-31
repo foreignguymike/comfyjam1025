@@ -82,8 +82,9 @@ public class IntroScene extends Screen {
     public IntroScene(Context context) {
         super(context);
 
-        text = new TextEntity(context, context.getFont(Context.M5X716), "", 20, 100);
+        text = new TextEntity(context, context.getFont(Context.CON26), "", 20, 100);
         text.ta = 0;
+        text.globalScale = textCam.viewportWidth / cam.viewportWidth;
 
         grass1 = context.getImage("grass1");
         grass2 = context.getImage("grass2");
@@ -105,10 +106,12 @@ public class IntroScene extends Screen {
         girl.x = -200;
         girl.y = 35;
 
-        titleText = new TextEntity(context, context.getFont(Context.M5X716), Constants.TITLE, Constants.WIDTH / 2f, 130, TextEntity.HAlignment.CENTER, TextEntity.VAlignment.CENTER);
+        titleText = new TextEntity(context, context.getFont(Context.PL56), Constants.TITLE, Constants.WIDTH / 2f, 130, TextEntity.HAlignment.CENTER, TextEntity.VAlignment.CENTER);
         titleText.a = titleText.ta = 0;
-        startText = new TextEntity(context, context.getFont(Context.M5X716), "Start", Constants.WIDTH / 2f, 40, TextEntity.HAlignment.CENTER, TextEntity.VAlignment.CENTER);
+        titleText.globalScale = textCam.viewportWidth / cam.viewportWidth;
+        startText = new TextEntity(context, context.getFont(Context.CON26), "Start", Constants.WIDTH / 2f, 40, TextEntity.HAlignment.CENTER, TextEntity.VAlignment.CENTER);
         startText.a = startText.ta = 0;
+        startText.globalScale = textCam.viewportWidth / cam.viewportWidth;
     }
 
     @Override
@@ -121,7 +124,6 @@ public class IntroScene extends Screen {
                 startText.ta = 0;
                 textTime = 0;
                 action = Action.INTRO_PAN;
-                context.audio.playMusic("forgotten", 0.5f, false);
             }
         }
     }
@@ -154,6 +156,9 @@ public class IntroScene extends Screen {
             }
         } else if (action == Action.INTRO_PAN) {
             textTime += dt;
+            if (textTime > 1f && !context.audio.isMusicPlaying()) {
+                context.audio.playMusic("forgotten", 0.5f, false);
+            }
             if (textTime > nextTextTime) {
                 textIndex++;
                 if (textIndex < texts.length) {
@@ -257,8 +262,10 @@ public class IntroScene extends Screen {
         }
 
         sb.setColor(1, 1, 1, 1);
+        sb.setProjectionMatrix(textCam.combined);
         titleText.render(sb);
         startText.render(sb);
+        sb.setProjectionMatrix(cam.combined);
         sb.draw(grave, gravex, 8, 30, 41);
         sb.draw(tree, gravex, 9, 126, 171);
         girl.render(sb);
@@ -276,9 +283,10 @@ public class IntroScene extends Screen {
             sb.draw(grass3, 61 * i, 8, 61, 6);
         }
 
-        sb.setProjectionMatrix(uiCam.combined);
+        sb.setProjectionMatrix(textCam.combined);
         text.render(sb);
 
+        sb.setProjectionMatrix(uiCam.combined);
         in.render(sb);
         out.render(sb);
 

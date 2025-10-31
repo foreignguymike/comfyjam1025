@@ -12,9 +12,10 @@ public class YearScreen extends Screen {
 
     public YearScreen(Context context, int year) {
         super(context);
-        text = new TextEntity(context, context.getFont(Context.VCR20), "YEAR " + year, Constants.WIDTH / 2f, Constants.HEIGHT / 2f, TextEntity.HAlignment.CENTER);
+        text = new TextEntity(context, context.getFont(Context.PL56), "Year " + year, Constants.WIDTH / 2f, Constants.HEIGHT / 2f, TextEntity.HAlignment.CENTER);
         text.setColor(1, 1, 1, 1);
         text.vAlignment = TextEntity.VAlignment.CENTER;
+        text.globalScale = textCam.viewportWidth / cam.viewportWidth;
 
         in = new Transition(context, Transition.Type.FLASH_IN, 2f);
         in.setFlashColor(Color.BLACK);
@@ -53,8 +54,10 @@ public class YearScreen extends Screen {
         sb.draw(pixel, 0, 0, Constants.WIDTH, Constants.HEIGHT);
 
         sb.setColor(1, 1, 1, 1);
+        sb.setProjectionMatrix(textCam.combined);
         text.render(sb);
 
+        sb.setProjectionMatrix(cam.combined);
         in.render(sb);
         out.render(sb);
 

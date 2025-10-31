@@ -11,8 +11,8 @@ import com.distraction.comfyjam1025.screens.ScreenManager;
 public class Context {
 
     private static final String ATLAS = "comfyjam1025.atlas";
-    public static final String M5X716 = "fonts/m5x716.fnt";
-    public static final String VCR20 = "fonts/vcr20.fnt";
+    public static final String CON26 = "fonts/constantia26.fnt";
+    public static final String PL56 = "fonts/PL56.fnt";
 
     public AssetManager assets;
     public AudioHandler audio;
@@ -23,8 +23,8 @@ public class Context {
     public Context() {
         assets = new AssetManager();
         assets.load(ATLAS, TextureAtlas.class);
-        assets.load(M5X716, BitmapFont.class);
-        assets.load(VCR20, BitmapFont.class);
+        assets.load(CON26, BitmapFont.class);
+        assets.load(PL56, BitmapFont.class);
         assets.finishLoading();
 
         audio = new AudioHandler();

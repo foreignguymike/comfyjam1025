@@ -34,6 +34,8 @@ public class TextEntity extends Entity {
 
     public float ta = 1;
 
+    public float globalScale = 1f;
+
     public TextEntity(Context context, BitmapFont font, String text, float x, float y, HAlignment hAlignment) {
         this(context, font, text, x, y);
         this.hAlignment = hAlignment;
@@ -86,6 +88,8 @@ public class TextEntity extends Entity {
     public void render(SpriteBatch sb) {
         if (currentText.isEmpty()) return;
 
+        float x = globalScale * this.x;
+        float y = globalScale * this.y;
         float tx, ty;
         if (hAlignment == HAlignment.CENTER) tx = x - w / 2f;
         else if (hAlignment == HAlignment.LEFT) tx = x;
