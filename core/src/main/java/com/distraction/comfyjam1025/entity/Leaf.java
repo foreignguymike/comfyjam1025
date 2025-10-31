@@ -1,6 +1,7 @@
 package com.distraction.comfyjam1025.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.distraction.comfyjam1025.Constants;
 import com.distraction.comfyjam1025.Context;
@@ -13,8 +14,8 @@ public class Leaf extends ImageEntity {
     private float xo;
     private float yo;
 
-    public Leaf(Context context, float x, float y, float dx, float dy) {
-        super(context, context.getImage("leaves").split(5 * Constants.SCALE, 5 * Constants.SCALE)[0][MathUtils.random(0, 3)]);
+    public Leaf(Context context, TextureRegion sheet, float x, float y, float dx, float dy) {
+        super(context, sheet.split(sheet.getRegionWidth() / 4, sheet.getRegionHeight())[0][MathUtils.random(0, 3)]);
 
         this.x = x;
         this.y = y;

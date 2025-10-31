@@ -10,7 +10,6 @@ public class Constants {
     public static final int SCREE_SCALE = 3;
     public static final int SWIDTH = WIDTH * SCREE_SCALE;
     public static final int SHEIGHT = HEIGHT * SCREE_SCALE;
-    public static final int SCALE = 3;
     public static final boolean FULLSCREEN = false;
 
     public static final Color[] COLORS = {

@@ -254,7 +254,7 @@ public class PlayScreen extends Screen {
             leafTime = MathUtils.random(0.3f, 1.4f);
             float x = MathUtils.random(20, Constants.WIDTH + 80);
             float y = Constants.HEIGHT + 10;
-            particles.add(new Leaf(context, x, y, -1f * MathUtils.random(1, 3), -1f * MathUtils.random(3, 6)));
+            particles.add(new Leaf(context, context.getImage("leaves"), x, y, -1f * MathUtils.random(1, 3), -1f * MathUtils.random(3, 6)));
         }
         for (int i = particles.size() - 1; i >= 0; i--) {
             ImageEntity p = particles.get(i);

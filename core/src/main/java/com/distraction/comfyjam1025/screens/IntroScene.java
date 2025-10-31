@@ -138,7 +138,7 @@ public class IntroScene extends Screen {
             leafTime = MathUtils.random(0.3f, 1.4f);
             float x = MathUtils.random(gravex + 25, gravex + 25 + 65);
             float y = MathUtils.random(97, 97 + 85);
-            particles.add(new Leaf(context, x, y, -1f * MathUtils.random(1, 3), -1f * MathUtils.random(3, 6)));
+            particles.add(new Leaf(context, context.getImage("leaves"), x, y, -1f * MathUtils.random(1, 3), -1f * MathUtils.random(3, 6)));
         }
 
         titleText.update(dt);
