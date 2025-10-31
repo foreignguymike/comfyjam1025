@@ -7,9 +7,10 @@ public class Constants {
     public static final String TITLE = "The Heart Left Behind";
     public static final int WIDTH = 320;
     public static final int HEIGHT = 180;
+    public static final int SCREE_SCALE = 3;
+    public static final int SWIDTH = WIDTH * SCREE_SCALE;
+    public static final int SHEIGHT = HEIGHT * SCREE_SCALE;
     public static final int SCALE = 3;
-    public static final int SWIDTH = WIDTH * SCALE;
-    public static final int SHEIGHT = HEIGHT * SCALE;
     public static final boolean FULLSCREEN = false;
 
     public static final Color[] COLORS = {

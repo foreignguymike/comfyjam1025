@@ -130,8 +130,8 @@ public class PuzzlePiece extends ImageEntity {
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(bgColor);
-        Utils.drawRotatedScaled(sb, pixel, x, y, rad, w * scale);
+        Utils.drawRotatedScaled(sb, pixel, x, y, w, h, rad, 1);
         sb.setColor(1, 1, 1, 1);
-        Utils.drawRotatedScaled(sb, animation.getImage(), x, y, rad, scale);
+        Utils.drawRotatedScaled(sb, animation.getImage(), x, y, w, h, rad, 1);
     }
 }

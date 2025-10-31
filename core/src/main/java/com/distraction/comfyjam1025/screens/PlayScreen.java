@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.sound.sampled.EnumControl;
+
 public class PlayScreen extends Screen {
 
     private static final String[] SCRIPTS = {
@@ -89,11 +91,12 @@ public class PlayScreen extends Screen {
         int tileSize = GRID_WIDTH / numRows;
         float sx = Constants.WIDTH / 2f - GRID_WIDTH / 2f;
         float sy = Constants.HEIGHT / 2f + GRID_WIDTH / 2f;
-        TextureRegion[][] images = context.getImage("puzzle" + year).split(tileSize, tileSize);
+        TextureRegion puzzleImage = context.getImage("puzzle" + year);
+        TextureRegion[][] images = puzzleImage.split(puzzleImage.getRegionWidth() / numRows, puzzleImage.getRegionHeight() / numRows);
         for (int row = 0; row < puzzle.length; row++) {
             for (int col = 0; col < puzzle[row].length; col++) {
                 puzzle[row][col] = new PuzzlePiece(context, row * numRows + col, row, col, images[row][col]);
-                puzzle[row][col].setSize(tileSize, tileSize);
+                puzzle[row][col].setSize(tileSize + 0.1f, tileSize + 0.1f);
             }
         }
 

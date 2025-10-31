@@ -85,7 +85,8 @@ public class GraveScene extends Screen {
         tree = context.getImage("tree");
         grave = context.getImage("grave");
 
-        girlImages = context.getImage("girl").split(22, 55)[year - 1];
+        TextureRegion girlImage = context.getImage("girl");
+        girlImages = girlImage.split(girlImage.getRegionWidth() / 4, girlImage.getRegionHeight() / 4)[year - 1];
         girl = new ImageEntity(context, Arrays.copyOfRange(girlImages, 0, 2), 0.5f);
         girl.x = GIRL_START;
         girl.y = 35;

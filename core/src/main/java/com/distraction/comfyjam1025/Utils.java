@@ -82,6 +82,23 @@ public class Utils {
         );
     }
 
+    public static void drawRotatedScaled(SpriteBatch sb,  TextureRegion image, float x, float y, float w, float h, float rad, float scale) {
+        w *= scale;
+        h *= scale;
+        sb.draw(
+            image,
+            x - w / 2f,
+            y - h / 2f,
+            w / 2f,
+            h / 2f,
+            w,
+            h,
+            1f,
+            1f,
+            MathUtils.radDeg * rad
+        );
+    }
+
     public static <T> void swap(List<T> list, int index1, int index2) {
         T temp = list.get(index1);
         list.set(index1, list.get(index2));

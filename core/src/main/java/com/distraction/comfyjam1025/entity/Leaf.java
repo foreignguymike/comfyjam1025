@@ -2,6 +2,7 @@ package com.distraction.comfyjam1025.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.distraction.comfyjam1025.Constants;
 import com.distraction.comfyjam1025.Context;
 import com.distraction.comfyjam1025.Utils;
 
@@ -13,7 +14,8 @@ public class Leaf extends ImageEntity {
     private float yo;
 
     public Leaf(Context context, float x, float y, float dx, float dy) {
-        super(context, context.getImage("leaves").split(5, 5)[0][MathUtils.random(0, 3)]);
+        super(context, context.getImage("leaves").split(5 * Constants.SCALE, 5 * Constants.SCALE)[0][MathUtils.random(0, 3)]);
+
         this.x = x;
         this.y = y;
         w = 5;

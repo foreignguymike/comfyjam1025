@@ -62,6 +62,7 @@ public class IntroScene extends Screen {
 
     private final List<ImageEntity> particles;
 
+    private final TextureRegion[] girlImages;
     private final ImageEntity girl;
 
     private float leafTime;
@@ -97,7 +98,9 @@ public class IntroScene extends Screen {
 
         particles = new ArrayList<>();
 
-        girl = new ImageEntity(context, Arrays.copyOfRange(context.getImage("girl").split(22, 55)[0], 0, 2), 0.5f);
+        TextureRegion girlImage = context.getImage("girl");
+        girlImages = girlImage.split(girlImage.getRegionWidth() / 4, girlImage.getRegionHeight() / 4)[0];
+        girl = new ImageEntity(context, Arrays.copyOfRange(girlImages, 0, 2), 0.5f);
         girl.setSize(22, 55);
         girl.x = -200;
         girl.y = 35;
@@ -182,7 +185,7 @@ public class IntroScene extends Screen {
             if (girl.x >= gravex + 15) {
                 girl.x = gravex + 15;
                 action = Action.GIRL_GIFT;
-                girl.animation.setAnimation(Arrays.copyOfRange(context.getImage("girl").split(22, 55)[0], 2, 4), 1.5f);
+                girl.animation.setAnimation(Arrays.copyOfRange(girlImages, 2, 4), 1.5f);
             }
             if (girlFrame == 0 && girl.animation.frame != girlFrame) {
                 float vol = MathUtils.clamp(0.2f - 0.2f * (panx - girl.x) / (Constants.WIDTH / 2f), 0, 0.2f);
@@ -193,7 +196,7 @@ public class IntroScene extends Screen {
             if (girl.animation.finishCount == 1 && girl.animation.frame == 1) {
                 action = Action.GIRL_LEAVE;
                 girl.hflip = true;
-                girl.animation.setAnimation(Arrays.copyOfRange(context.getImage("girl").split(22, 55)[0], 0, 2), 0.5f);
+                girl.animation.setAnimation(Arrays.copyOfRange(girlImages, 0, 2), 0.5f);
             }
         } else if (action == Action.GIRL_LEAVE) {
             girl.update(dt);
@@ -250,7 +253,7 @@ public class IntroScene extends Screen {
 
         sb.setColor(1, 1, 1, 1);
         for (int i = -1; i < 2; i++) {
-            sb.draw(treeBg, treeBg.getRegionWidth() * i + cam.position.x / 2f, -2, 320.1f, 95f);
+            sb.draw(treeBg, 320f * i + cam.position.x / 2f, -2, 320.1f, 95f);
         }
 
         sb.setColor(1, 1, 1, 1);
