@@ -25,10 +25,6 @@ public class PuzzlePiece extends ImageEntity {
     private float desty;
     private float destrad;
 
-    private float totalDist;
-    private float jumpy;
-    private float scale;
-
     public int rotateIndex = 0;
 
     private final TextureRegion pixel;
@@ -58,7 +54,6 @@ public class PuzzlePiece extends ImageEntity {
         this.desty = desty;
         dx = destx - x;
         dy = desty - y;
-        totalDist = calculateDistance(x, y, destx, desty);
         dx *= 4;
         dy *= 4;
         dx = Math.abs(dx);
@@ -77,12 +72,6 @@ public class PuzzlePiece extends ImageEntity {
     public void randomRotate() {
         rotateIndex = MathUtils.random(0, 3);
         rad = destrad = ROTATIONS[rotateIndex];
-    }
-
-    private float calculateDistance(float x1, float y1, float x2, float y2) {
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-        return (float) Math.sqrt(dx * dx + dy * dy);
     }
 
     private void moveToDestination(float dt) {
@@ -120,18 +109,13 @@ public class PuzzlePiece extends ImageEntity {
                 if (rad > destrad) rad = destrad;
             }
         }
-
-        float distLeft = calculateDistance(x, y, destx, desty);
-        float percent = distLeft / totalDist;
-        jumpy = MathUtils.sin(MathUtils.PI * percent) * 70;
-        scale = 1 + 1.5f * jumpy / 70;
     }
 
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(bgColor);
-        Utils.drawRotatedScaled(sb, pixel, x, y, w, h, rad, 1);
+        Utils.drawRotated(sb, pixel, x, y, w, h, rad);
         sb.setColor(1, 1, 1, 1);
-        Utils.drawRotatedScaled(sb, animation.getImage(), x, y, w, h, rad, 1);
+        Utils.drawRotated(sb, animation.getImage(), x, y, w, h, rad);
     }
 }

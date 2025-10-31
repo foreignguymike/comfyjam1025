@@ -48,6 +48,8 @@ public class PlayScreen extends Screen {
     private final TextureRegion puzzleBg;
     private final PuzzlePiece[][] puzzle;
     private PuzzlePiece selected;
+    private PuzzlePiece render1;
+    private PuzzlePiece render2;
 
     private final ImageEntity lmb;
     private final ImageEntity rmb;
@@ -157,6 +159,17 @@ public class PlayScreen extends Screen {
         }
     }
 
+    private boolean allDest() {
+        for (PuzzlePiece[] puzzlePieces : puzzle) {
+            for (PuzzlePiece cell : puzzlePieces) {
+                if (!cell.atDestination()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private boolean isDone() {
         for (int row = 0; row < puzzle.length; row++) {
             for (int col = 0; col < puzzle[row].length; col++) {
@@ -192,6 +205,9 @@ public class PlayScreen extends Screen {
                                 int r2 = cell.row;
                                 int c2 = cell.col;
 
+                                render1 = puzzle[r1][c1];
+                                render2 = puzzle[r2][c2];
+
                                 PuzzlePiece temp = puzzle[r1][c1];
                                 puzzle[r1][c1] = puzzle[r2][c2];
                                 puzzle[r1][c1].setDest(temp.x, temp.y);
@@ -214,6 +230,7 @@ public class PlayScreen extends Screen {
                 for (PuzzlePiece[] row : puzzle) {
                     for (PuzzlePiece cell : row) {
                         if (cell.contains(m.x, m.y)) {
+                            render1 = cell;
                             cell.rotate();
                         }
                     }
@@ -226,6 +243,8 @@ public class PlayScreen extends Screen {
     public void update(float dt) {
         in.update(dt);
         out.update(dt);
+
+        if (allDest()) render1 = render2 = null;
 
         for (PuzzlePiece[] row : puzzle) {
             for (PuzzlePiece cell : row) cell.update(dt);
@@ -290,6 +309,8 @@ public class PlayScreen extends Screen {
         for (PuzzlePiece[] row : puzzle) {
             for (PuzzlePiece cell : row) cell.render(sb);
         }
+        if (render2 != null) render2.render(sb);
+        if (render1 != null) render1.render(sb);
         if (selected != null) {
             sb.setColor(Constants.PUZZLE_PIECE_BORDER);
             sb.draw(pixel, selected.x - selected.w / 2f - 1, selected.y - selected.h / 2f - 1, selected.w + 2, 1);
