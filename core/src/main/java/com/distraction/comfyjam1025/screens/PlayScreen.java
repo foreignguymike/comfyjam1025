@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.distraction.comfyjam1025.Constants;
 import com.distraction.comfyjam1025.Context;
+import com.distraction.comfyjam1025.Utils;
 import com.distraction.comfyjam1025.entity.ImageEntity;
 import com.distraction.comfyjam1025.entity.Leaf;
 import com.distraction.comfyjam1025.entity.PuzzlePiece;
 import com.distraction.comfyjam1025.entity.TextEntity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -74,8 +76,10 @@ public class PlayScreen extends Screen {
 
         lmb = new ImageEntity(context, context.getImage("mouse"));
         lmb.setPosition(uix, 115);
+        lmb.setSize(24, 30);
         rmb = new ImageEntity(context, context.getImage("mouse"));
         rmb.setPosition(uix, 55);
+        rmb.setSize(24, 30);
         rmb.hflip = true;
         swapText = new TextEntity(context, context.getFont(Context.M5X716), "Swap", uix, 140, TextEntity.HAlignment.CENTER);
         rotateText = new TextEntity(context, context.getFont(Context.M5X716), "Rotate", uix, 80, TextEntity.HAlignment.CENTER);
@@ -89,12 +93,13 @@ public class PlayScreen extends Screen {
         for (int row = 0; row < puzzle.length; row++) {
             for (int col = 0; col < puzzle[row].length; col++) {
                 puzzle[row][col] = new PuzzlePiece(context, row * numRows + col, row, col, images[row][col]);
+                puzzle[row][col].setSize(tileSize, tileSize);
             }
         }
 
         List<PuzzlePiece> flat = new ArrayList<>();
         for (PuzzlePiece[] row : puzzle) {
-            for (PuzzlePiece cell : row) flat.add(cell);
+            flat.addAll(Arrays.asList(row));
         }
         Collections.shuffle(flat);
         Collections.shuffle(flat);
@@ -274,7 +279,7 @@ public class PlayScreen extends Screen {
             rmb.render(sb);
         }
 
-        sb.draw(puzzleBg, Constants.WIDTH / 2f - puzzleBg.getRegionWidth() / 2f, Constants.HEIGHT / 2f - puzzleBg.getRegionHeight() / 2f);
+        Utils.drawCentered(sb, puzzleBg, Constants.WIDTH / 2f, Constants.HEIGHT / 2f , 126, 126);
         for (PuzzlePiece[] row : puzzle) {
             for (PuzzlePiece cell : row) cell.render(sb);
         }
@@ -290,7 +295,7 @@ public class PlayScreen extends Screen {
         if (done) {
             text.render(sb);
             if (doneTime < 0 && (nextTime % 0.9f) < 0.45f) {
-                sb.draw(next, 380, 20);
+                sb.draw(next, 380, 20, 8, 8);
             }
         }
 

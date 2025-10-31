@@ -20,6 +20,10 @@ public class Utils {
         sb.draw(image, x - w / 2f, y - h / 2f, w, h);
     }
 
+    public static void drawCentered(SpriteBatch sb, TextureRegion image, float x, float y, float w, float h) {
+        sb.draw(image, x - w / 2f, y - h / 2f, w, h);
+    }
+
     public static void drawCentered(SpriteBatch sb, TextureRegion image, float x, float y, float w, float h, boolean flip) {
         if (flip) w = -w;
         sb.draw(image, x - w / 2f, y - h / 2f, w, h);
@@ -40,6 +44,21 @@ public class Utils {
             image.getRegionHeight() / 2f,
             image.getRegionWidth(),
             image.getRegionHeight(),
+            1f,
+            1f,
+            MathUtils.radDeg * rad
+        );
+    }
+
+    public static void drawRotated(SpriteBatch sb,  TextureRegion image, float x, float y, float w, float h, float rad) {
+        sb.draw(
+            image,
+            x - w / 2f,
+            y - h / 2f,
+            w / 2f,
+            h / 2f,
+            w,
+            h,
             1f,
             1f,
             MathUtils.radDeg * rad

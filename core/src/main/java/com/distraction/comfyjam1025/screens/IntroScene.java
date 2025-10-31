@@ -98,6 +98,7 @@ public class IntroScene extends Screen {
         particles = new ArrayList<>();
 
         girl = new ImageEntity(context, Arrays.copyOfRange(context.getImage("girl").split(22, 55)[0], 0, 2), 0.5f);
+        girl.setSize(22, 55);
         girl.x = -200;
         girl.y = 35;
 
@@ -150,9 +151,6 @@ public class IntroScene extends Screen {
             }
         } else if (action == Action.INTRO_PAN) {
             textTime += dt;
-//            if (textTime > 3.5 && !context.audio.isPlaying()) {
-//                context.audio.playMusic("forgotten", 0.5f, false);
-//            }
             if (textTime > nextTextTime) {
                 textIndex++;
                 if (textIndex < texts.length) {
@@ -252,14 +250,14 @@ public class IntroScene extends Screen {
 
         sb.setColor(1, 1, 1, 1);
         for (int i = -1; i < 2; i++) {
-            sb.draw(treeBg, treeBg.getRegionWidth() * i + cam.position.x / 2f, -2, treeBg.getRegionWidth() + 0.1f, treeBg.getRegionHeight());
+            sb.draw(treeBg, treeBg.getRegionWidth() * i + cam.position.x / 2f, -2, 320.1f, 95f);
         }
 
         sb.setColor(1, 1, 1, 1);
         titleText.render(sb);
         startText.render(sb);
-        sb.draw(grave, gravex, 8);
-        sb.draw(tree, gravex, 9);
+        sb.draw(grave, gravex, 8, 30, 41);
+        sb.draw(tree, gravex, 9, 126, 171);
         girl.render(sb);
         for (ImageEntity p : particles) p.render(sb);
 
@@ -270,9 +268,9 @@ public class IntroScene extends Screen {
         sb.setProjectionMatrix(cam.combined);
         sb.setColor(1, 1, 1, 1);
         for (int i = 0; i < 20; i++) {
-            sb.draw(grass1, grass1.getRegionWidth() * i, 0);
-            sb.draw(grass2, grass2.getRegionWidth() * i, 9);
-            sb.draw(grass3, grass3.getRegionWidth() * i, 8);
+            sb.draw(grass1, 32 * i, 0, 32, 16);
+            sb.draw(grass2, 38 * i, 9, 38, 5);
+            sb.draw(grass3, 61 * i, 8, 61, 6);
         }
 
         sb.setProjectionMatrix(uiCam.combined);

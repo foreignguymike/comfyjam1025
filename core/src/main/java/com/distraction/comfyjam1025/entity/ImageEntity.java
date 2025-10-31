@@ -32,6 +32,6 @@ public class ImageEntity extends Entity {
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(1, 1, 1, 1);
-        Utils.drawCentered(sb, animation.getImage(), x, y, hflip);
+        Utils.drawCentered(sb, animation.getImage(), x, y, w, h, hflip);
     }
 }

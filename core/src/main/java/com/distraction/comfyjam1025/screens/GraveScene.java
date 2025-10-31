@@ -89,6 +89,7 @@ public class GraveScene extends Screen {
         girl = new ImageEntity(context, Arrays.copyOfRange(girlImages, 0, 2), 0.5f);
         girl.x = GIRL_START;
         girl.y = 35;
+        girl.setSize(22, 55);
 
         texts = TEXT_DATA[year - 2];
         textTime = texts[0].duration;
@@ -193,9 +194,9 @@ public class GraveScene extends Screen {
         sb.draw(pixel, 0, 90, Constants.WIDTH, 90);
 
         sb.setColor(1, 1, 1, 1);
-        sb.draw(treeBg, 0, 0);
-        sb.draw(grave, gravex, 8);
-        sb.draw(tree, gravex, 9);
+        sb.draw(treeBg, 0, -2, 320.1f, 95f);
+        sb.draw(grave, gravex, 8, 30, 41);
+        sb.draw(tree, gravex, 9, 126, 171);
         girl.render(sb);
         for (ImageEntity p : particles) p.render(sb);
 
@@ -204,9 +205,9 @@ public class GraveScene extends Screen {
 
         sb.setColor(1, 1, 1, 1);
         for (int i = 0; i < 10; i++) {
-            sb.draw(grass1, grass1.getRegionWidth() * i, 0);
-            sb.draw(grass2, grass2.getRegionWidth() * i, 9);
-            sb.draw(grass3, grass3.getRegionWidth() * i, 8);
+            sb.draw(grass1, 32 * i, 0, 32, 16);
+            sb.draw(grass2, 38 * i, 9, 38, 5);
+            sb.draw(grass3, 61 * i, 8, 61, 6);
         }
 
         text.render(sb);

@@ -16,6 +16,8 @@ public class Leaf extends ImageEntity {
         super(context, context.getImage("leaves").split(5, 5)[0][MathUtils.random(0, 3)]);
         this.x = x;
         this.y = y;
+        w = 5;
+        h = 5;
         this.dx = dx;
         this.dy = dy;
     }
@@ -42,6 +44,6 @@ public class Leaf extends ImageEntity {
     @Override
     public void render(SpriteBatch sb) {
         sb.setColor(1, 1, 1, a);
-        Utils.drawRotated(sb, animation.getImage(), x + xo, y + yo, rad);
+        Utils.drawRotated(sb, animation.getImage(), x + xo, y + yo, w, h, rad);
     }
 }
