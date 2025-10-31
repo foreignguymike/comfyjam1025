@@ -35,8 +35,8 @@ public class PlayScreen extends Screen {
             "I don't feel forgotten.",
         "I see it now.\n" +
             "All this time, I thought I had faded.\n" +
-            "But she remembered year after year.\n" +
-            "Quietly, she carried my heart with her.\n" +
+            "But she remembers year after year,\n" +
+            "quietly carrying my heart with her.\n" +
             "And that’s enough."
     };
 

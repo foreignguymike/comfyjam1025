@@ -38,8 +38,8 @@ public class IntroScene extends Screen {
     };
 
     private static final TextData[] TEXT_DATA_2 = new TextData[]{
-        new TextData("...Who was that?", 4),
-        new TextData("She left something...", 4)
+        new TextData("...Who was that?", 3),
+        new TextData("She left something...", 3)
     };
 
     private enum Action {

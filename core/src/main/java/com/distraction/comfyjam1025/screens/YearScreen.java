@@ -17,10 +17,10 @@ public class YearScreen extends Screen {
         text.vAlignment = TextEntity.VAlignment.CENTER;
         text.globalScale = textCam.viewportWidth / cam.viewportWidth;
 
-        in = new Transition(context, Transition.Type.FLASH_IN, 2f);
+        in = new Transition(context, Transition.Type.FLASH_IN, 1f);
         in.setFlashColor(Color.BLACK);
         in.start();
-        out = new Transition(context, Transition.Type.FLASH_OUT, 2f);
+        out = new Transition(context, Transition.Type.FLASH_OUT, 1f);
         out.setCallback(() -> {
             if (year == 1) context.sm.replace(new PlayScreen(context, year));
             else context.sm.replace(new GraveScene(context, year));
