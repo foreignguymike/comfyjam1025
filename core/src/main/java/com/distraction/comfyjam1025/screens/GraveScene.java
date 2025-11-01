@@ -16,26 +16,28 @@ import java.util.List;
 
 public class GraveScene extends Screen {
 
-    private static final float GIRL_SPEED = 30;
+    private static final float GIRL_SPEED = 35;
     private static final float GIRL_START = -20;
 
     private static final TextData[][] TEXT_DATA = new TextData[][]{
         {
             new TextData("", 2f),
-            new TextData("Again. The same girl.", 5f),
-            new TextData("I still don't know\nwhat she's doing here.", 5f),
-            new TextData("I thought nobody cared.", 5f)
+            new TextData("Again. The same girl.", 4f),
+            new TextData("I still don't know\nwhat she's doing here.", 4f),
+            new TextData("I thought nobody cared.", 4f)
         },
         {
             new TextData("", 2f),
             new TextData("Another visit. Another gift.\nIt's a letter.", 5f),
-            new TextData("I hear a soft whisper.", 4f),
-            new TextData("\"Thank you\"", 3f)
+            new TextData("I hear a soft whisper.", 3f),
+            new TextData("\"Thank you\"", 2f)
         },
         {
-            new TextData("", 4f),
-            new TextData("In her hands,\nsomething small...", 5f),
-            new TextData("fragile and\nstitched with care.", 5f)
+            new TextData("", 2f),
+            new TextData("In her hands, something small...", 4f),
+            new TextData("fragile and stitched with care.", 4f),
+            new TextData("She made this for me?", 4f),
+
         }
     };
 
@@ -132,11 +134,13 @@ public class GraveScene extends Screen {
 
         textTime -= dt;
         if (textTime <= 0) {
-            if (textIndex < texts.length - 1) {
-                textIndex++;
+            textIndex++;
+            if (textIndex < texts.length) {
                 textTime = texts[textIndex].duration;
                 text.setText(texts[textIndex].text);
                 text.ta = 1f;
+            } else if (!out.started()) {
+                out.start();
             }
         } else if (textTime <= 0.5f) {
             text.ta = 0f;
@@ -164,10 +168,6 @@ public class GraveScene extends Screen {
         } else if (action == Action.GIRL_LEAVE) {
             girl.update(dt);
             girl.x -= GIRL_SPEED * dt;
-            if (girl.x < GIRL_START && textIndex >= texts.length - 1) {
-                action = Action.FADE_OUT;
-                out.start();
-            }
             if (girlFrame == 0 && girl.animation.frame != girlFrame && girl.x > 0) {
                 float vol = MathUtils.clamp(0.2f * girl.x / (Constants.WIDTH / 2f), 0, 0.2f);
                 context.audio.playSound("step", vol);

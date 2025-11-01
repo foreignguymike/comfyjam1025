@@ -157,7 +157,7 @@ public class IntroScene extends Screen {
         } else if (action == Action.INTRO_PAN) {
             textTime += dt;
             if (textTime > 1f && !context.audio.isMusicPlaying()) {
-                context.audio.playMusic("forgotten", 0.5f, false);
+                context.audio.playMusic("forgotten", 0.7f, false);
             }
             if (textTime > nextTextTime) {
                 textIndex++;
