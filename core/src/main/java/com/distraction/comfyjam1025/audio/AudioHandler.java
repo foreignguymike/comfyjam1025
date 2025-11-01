@@ -17,6 +17,7 @@ public class AudioHandler {
     public AudioHandler() {
         music = new HashMap<>();
         addMusic("forgotten", "music/forgotten.ogg");
+        addMusic("remembered", "music/remembered.ogg");
 
         sounds = new HashMap<>();
         addSound("step", "sfx/step.ogg");
