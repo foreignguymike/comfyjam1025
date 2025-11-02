@@ -231,6 +231,7 @@ public class PlayScreen extends Screen {
                         if (cell.contains(m.x, m.y)) {
                             render1 = cell;
                             cell.rotate();
+                            return;
                         }
                     }
                 }
