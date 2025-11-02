@@ -35,6 +35,7 @@ public class Context {
 //        sm = new ScreenManager(new com.distraction.comfyjam1025.screens.PlayScreen(this, 1));
 //        sm = new ScreenManager(new com.distraction.comfyjam1025.screens.YearScreen(this, 1));
 //        sm = new ScreenManager(new com.distraction.comfyjam1025.screens.GraveScene(this, 4));
+//        sm = new ScreenManager(new com.distraction.comfyjam1025.screens.OutroScreen(this, new java.util.ArrayList<>()));
     }
 
     public TextureRegion getImage(String key) {

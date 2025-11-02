@@ -21,20 +21,25 @@ public class IntroScene extends Screen {
     private static final float PAN_SPEED = 4;
     private static final float GIRL_SPEED = 30;
     private static final float GIRL_START = 150;
+    private static final float STEP_VOL = 0.15f;
 
     private static final TextData[] TEXT_DATA_1 = new TextData[]{
         new TextData("Another year. Another autumn.", 4),
-        new TextData("I used to think someone might visit...", 4.5f),
-        new TextData("But family is gone now. No friends left.", 4.5f),
+        new TextData("I used to think someone might visit...", 4f),
+        new TextData("But family is gone now. No friends left.", 4f),
         new TextData("No one to remember me.", 4),
+
         new TextData("It's strange, being forgotten.", 4),
-        new TextData("You fade a little more each year,", 4.5f),
-        new TextData("like trees losing their leaves.", 4.5f),
+        new TextData("To be gone completely.", 4),
+        new TextData("You fade a little more each year,", 4f),
+        new TextData("like trees losing their leaves.", 4f),
+
         new TextData("I suppose that's alright.", 4),
-        new TextData("I've had a quiet life.", 4),
+        new TextData("I was always invisible,", 4),
+        new TextData("living a quiet life.", 4),
         new TextData("Maybe that's enough.", 4),
-        new TextData("", 4),
-        new TextData("Hmm? Someone's coming.", 4)
+        new TextData("", 3),
+        new TextData("Hmm? Someone's coming.", 3)
     };
 
     private static final TextData[] TEXT_DATA_2 = new TextData[]{
@@ -71,7 +76,7 @@ public class IntroScene extends Screen {
     private final float panx = gravex + 10;
 
     private float textTime;
-    private float nextTextTime = 4;
+    private float nextTextTime = 2;
     private final TextEntity text;
     private int textIndex = -1;
     private TextData[] texts = TEXT_DATA_1;
@@ -156,7 +161,7 @@ public class IntroScene extends Screen {
             }
         } else if (action == Action.INTRO_PAN) {
             textTime += dt;
-            if (textTime > 1f && !context.audio.isMusicPlaying()) {
+            if (textTime > 2f && !context.audio.isMusicPlaying()) {
                 context.audio.playMusic("forgotten", 0.7f, false);
             }
             if (textTime > nextTextTime) {
@@ -193,7 +198,7 @@ public class IntroScene extends Screen {
                 girl.animation.setAnimation(Arrays.copyOfRange(girlImages, 2, 4), 1.5f);
             }
             if (girlFrame == 0 && girl.animation.frame != girlFrame) {
-                float vol = MathUtils.clamp(0.2f - 0.2f * (panx - girl.x) / (Constants.WIDTH / 2f), 0, 0.2f);
+                float vol = MathUtils.clamp(STEP_VOL - STEP_VOL * (panx - girl.x) / (Constants.WIDTH / 2f), 0, STEP_VOL);
                 context.audio.playSound("step", vol);
             }
         } else if (action == Action.GIRL_GIFT) {
@@ -230,7 +235,7 @@ public class IntroScene extends Screen {
             }
             text.update(dt);
             if (girlFrame == 0 && girl.animation.frame != girlFrame && girl.x > panx - Constants.WIDTH / 2f) {
-                float vol = MathUtils.clamp(0.2f - 0.2f * (panx - girl.x) / (Constants.WIDTH / 2f), 0, 0.2f);
+                float vol = MathUtils.clamp(STEP_VOL - STEP_VOL * (panx - girl.x) / (Constants.WIDTH / 2f), 0, STEP_VOL);
                 context.audio.playSound("step", vol);
             }
         }

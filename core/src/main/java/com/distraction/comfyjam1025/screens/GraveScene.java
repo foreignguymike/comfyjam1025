@@ -18,6 +18,7 @@ public class GraveScene extends Screen {
 
     private static final float GIRL_SPEED = 35;
     private static final float GIRL_START = -20;
+    private static final float STEP_VOL = 0.15f;
 
     private static final TextData[][] TEXT_DATA = new TextData[][]{
         {
@@ -155,7 +156,7 @@ public class GraveScene extends Screen {
                 girl.animation.setAnimation(Arrays.copyOfRange(girlImages, 2, 4), 1.5f);
             }
             if (girlFrame == 0 && girl.animation.frame != girlFrame) {
-                float vol = MathUtils.clamp(0.2f * girl.x / (Constants.WIDTH / 2f), 0, 0.2f);
+                float vol = MathUtils.clamp(STEP_VOL * girl.x / (Constants.WIDTH / 2f), 0, STEP_VOL);
                 context.audio.playSound("step", vol);
             }
         } else if (action == Action.GIRL_GIFT) {
@@ -169,7 +170,7 @@ public class GraveScene extends Screen {
             girl.update(dt);
             girl.x -= GIRL_SPEED * dt;
             if (girlFrame == 0 && girl.animation.frame != girlFrame && girl.x > 0) {
-                float vol = MathUtils.clamp(0.2f * girl.x / (Constants.WIDTH / 2f), 0, 0.2f);
+                float vol = MathUtils.clamp(STEP_VOL * girl.x / (Constants.WIDTH / 2f), 0, STEP_VOL);
                 context.audio.playSound("step", vol);
             }
         }

@@ -24,8 +24,10 @@ public class PlayScreen extends Screen {
         "A flower?\n" +
             "People leave those for the\n" +
             "ones they care about.\n" +
+            "Must be a mistake.\n" +
             "Maybe she was just passing by...",
         "That photo...\n" +
+            "It's the last one taken of my parents.\n" +
             "I kept it close near the end.\n" +
             "It was my most cherished possession.\n" +
             "How did she find it?",
@@ -43,6 +45,7 @@ public class PlayScreen extends Screen {
     private static final int GRID_WIDTH = 120;
     private static final float PAN_SPEED = 30;
 
+    private final int year;
     private final int numRows;
 
     private final TextureRegion puzzleBg;
@@ -71,7 +74,8 @@ public class PlayScreen extends Screen {
     public PlayScreen(Context context, int year) {
         super(context);
 
-        numRows = 3;
+        this.year = year;
+        numRows = year == 1 ? 2 : 3;
 
         float uix = 50;
 
@@ -125,13 +129,8 @@ public class PlayScreen extends Screen {
         in.setFlashColor(Color.BLACK);
         in.start();
 
-        if (year == 4) {
-            out = new Transition(context, Transition.Type.FLASH_OUT, 1f, () -> context.sm.replace(new IntroScene(context)));
-            out.setFlashColor(Color.WHITE);
-        } else {
-            out = new Transition(context, Transition.Type.FLASH_OUT, 1f, () -> context.sm.replace(new YearScreen(context, year + 1)));
-            out.setFlashColor(Color.BLACK);
-        }
+        out = new Transition(context, Transition.Type.FLASH_OUT, 1f, () -> context.sm.replace(new YearScreen(context, year + 1)));
+        out.setFlashColor(Color.BLACK);
 
         text = new TextEntity(context, context.getFont(Context.CON26), SCRIPTS[year - 1], Constants.WIDTH / 2f + 80, Constants.HEIGHT / 2f + GRID_WIDTH / 2f - 10);
         text.setColor(1, 1, 1, 0);
@@ -250,10 +249,14 @@ public class PlayScreen extends Screen {
             for (PuzzlePiece cell : row) cell.update(dt);
         }
         if (!done && isDone()) {
-            done = true;
-            selected = null;
-            context.audio.playSound("puzzlefinish", 0.5f);
-            flash = 1f;
+            if (year == 4) {
+                context.sm.replace(new OutroScreen(context, particles));
+            } else {
+                done = true;
+                selected = null;
+                flash = 1f;
+                context.audio.playSound("puzzlefinish", 0.5f);
+            }
         }
         flash -= dt;
         if (done) {
